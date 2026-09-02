@@ -14,7 +14,9 @@ TEXT_SUFFIXES = {
     ".cfg",
     ".cff",
     ".html",
+    ".css",
     ".json",
+    ".js",
     ".lean",
     ".lock",
     ".md",
@@ -26,6 +28,9 @@ TEXT_SUFFIXES = {
     ".toml",
     ".ts",
     ".txt",
+    ".svg",
+    ".webmanifest",
+    ".xml",
     ".yml",
     ".yaml",
 }
@@ -71,10 +76,16 @@ PROMOTIONAL_TERMS = (
     "world" + "-class",
 )
 AI_FILLER = (
+    "a testament " + "to",
+    "at its " + "core",
     "in today's " + "fast-paced",
     "in the ever-" + "evolving",
+    "in a world " + "where",
     "more than " + "just",
+    "next-" + "generation",
     "not " + "just",
+    "paradigm " + "shift",
+    "state-of-the-" + "art",
 )
 
 

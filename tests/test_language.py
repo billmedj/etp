@@ -58,6 +58,15 @@ class LanguageTests(unittest.TestCase):
         )
         self.assertTrue(any("promotional wording" in item for item in findings))
 
+    def test_formulaic_filler_fails(self) -> None:
+        restricted_phrase = "at its " + "core"
+        findings = MODULE.check_text(
+            Path("sample.md"),
+            f"{restricted_phrase}, the protocol changes execution.\n",
+            "sample.md",
+        )
+        self.assertTrue(any("formulaic filler" in item for item in findings))
+
     def test_non_ascii_markdown_fails(self) -> None:
         findings = MODULE.check_text(
             Path("sample.md"),

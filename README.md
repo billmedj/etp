@@ -1,3 +1,5 @@
+<img src="./assets/etp-mark.svg" alt="ETP mark" width="48" height="48">
+
 # Effect Transaction Protocol
 
 [![CI](https://github.com/billmedj/etp/actions/workflows/ci.yml/badge.svg)](https://github.com/billmedj/etp/actions/workflows/ci.yml)
@@ -6,17 +8,17 @@
 **Protocol:** Core 0.1 implementer draft; **Reference software:**
 0.1.0-alpha.1
 
-Effect Transaction Protocol (ETP) is a record protocol and executor state
-machine for externally visible actions proposed by untrusted agents. An
-effect is one attempt to change or invoke an external target, such as an HTTP
-request, Kubernetes patch, or file write.
+Effect Transaction Protocol (ETP) defines an append-only record chain and
+executor rules for externally visible actions proposed by untrusted agents.
+An effect is one attempt to change or invoke an external target, such as an
+HTTP request, Kubernetes patch, or file write.
 
-An agent can propose an effect. An authority evaluates the exact proposal. A
-conforming executor validates and claims a short-lived, single-use grant before
-dispatch. The executor then records the observed outcome. If dispatch status
-is unclear, the outcome is `unknown` and the grant remains consumed.
-Reconciliation adds evidence for the next operator decision. It never restores
-the grant.
+An agent can propose an effect. An evaluator decides whether to allow the exact
+proposal. A conforming executor validates the complete record chain and claims
+a short-lived, single-use grant before dispatch. The executor then records the
+observed outcome. If dispatch status is unclear, the outcome is `unknown` and
+the grant remains consumed. Reconciliation adds evidence for the next operator
+decision. It never restores the grant.
 
 ```text
 TaskCommitment
@@ -37,9 +39,10 @@ Agent systems often authorize a broad tool or role, then let a model choose the
 final target and arguments. This leaves a gap between policy approval and the
 effect that reaches an external system.
 
-ETP narrows that gap. It binds authority to one typed proposal, one observed
-pre-state, one executor audience, and one claim. It also preserves uncertainty
-when a crash or network failure makes the external result unclear.
+ETP specifies a narrower boundary. It binds a grant to one typed proposal, one
+observed pre-state, one executor audience, and one claim. It preserves an
+`unknown` outcome when a crash or network failure makes the external result
+unclear.
 
 ## Core properties
 
@@ -50,7 +53,7 @@ A conforming deployment preserves these rules for each protected effect:
    resource claim.
 3. An evaluator returns `allow`, `deny`, or `review` for that proposal.
 4. Only `allow` can produce a grant.
-5. One proposal and decision can produce at most one grant.
+5. One proposal and one decision can each produce at most one grant.
 6. The executor validates the complete chain and current state.
 7. The executor atomically consumes the grant before dispatch.
 8. The receipt records `not_dispatched`, `succeeded`, `failed`, or `unknown`
@@ -84,6 +87,8 @@ A conforming deployment preserves these rules for each protected effect:
 - [`RELATED_WORK.md`](./RELATED_WORK.md): relationship to adjacent standards
   and systems.
 - [`BENCHMARKS.md`](./BENCHMARKS.md): verifier benchmark method and limits.
+- [`LANGUAGE.md`](./LANGUAGE.md): protocol terminology and public claim rules.
+- [`BRAND.md`](./BRAND.md): visual identity and public writing guidance.
 
 ## Quick start
 
@@ -142,6 +147,7 @@ repository root:
 
 ```console
 python tools/check-language.py
+python tools/check-site.py
 python -m unittest discover -s tests -v
 cd formal/lean
 lake build
@@ -198,6 +204,8 @@ target-specific tests, and external review. See
 ## Project policy
 
 - License: [Apache License 2.0](./LICENSE)
+- Identity and writing: [BRAND.md](./BRAND.md) and
+  [LANGUAGE.md](./LANGUAGE.md)
 - Security reports: [SECURITY.md](./SECURITY.md)
 - Contributions: [CONTRIBUTING.md](./CONTRIBUTING.md)
 - Governance: [GOVERNANCE.md](./GOVERNANCE.md)

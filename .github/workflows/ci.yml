@@ -38,6 +38,9 @@ jobs:
       - name: Check public language and repository boundaries
         run: python tools/check-language.py
 
+      - name: Check the public site contract
+        run: python tools/check-site.py
+
       - name: Test repository verification tools
         run: python -m unittest discover -s tests -v
 

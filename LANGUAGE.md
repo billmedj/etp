@@ -22,6 +22,30 @@ Do not use slogans, rhetorical questions, metaphors, or promotional claims in
 technical documents. Do not use words such as "revolutionary", "bulletproof",
 or "world-class" as technical evidence.
 
+## Public copy
+
+Use the full name "Effect Transaction Protocol" on first use. Use "ETP" after
+that point. Identify which subject makes each claim:
+
+- The specification defines records, roles, required checks, and lifecycle
+  rules.
+- The repository provides reference software, vectors, tests, and formal
+  artifacts.
+- A deployment selects trust roots, storage, adapters, keys, clocks, policy,
+  and operational controls.
+
+Do not transfer a result from one subject to another. A repository test does
+not prove a deployment property. A protocol requirement does not prove that an
+implementation enforces it.
+
+Use a concrete link label. Write "Read the specification" or "Run the
+conformance suite" instead of "Learn more" or "Explore". Keep one stable name
+for the same action throughout a page or procedure.
+
+Put the evidence boundary next to a public count. For a formal result, name the
+model and bound. For a test count, name the profile and corpus. Do not repeat
+the same claim in a heading, introduction, card, and conclusion.
+
 ## Protocol terms
 
 | Term | Meaning |
@@ -62,6 +86,18 @@ Use these rules in specifications and implementation text:
   profile define the validation.
 - Use "production ready" only after the deployment profile, operational tests,
   key management, complete mediation, and external review are complete.
+- Use "single-use claim" for grant consumption. Do not use "one-time
+  execution" or "exactly-once execution". The protocol cannot prove that an
+  external target applies an effect exactly once.
+- Use "checks current state immediately before claim" when timing matters. A
+  pre-state check does not remove the race before dispatch. A mutating effect
+  profile also needs a target-side condition or fencing.
+- Use "candidate transaction boundary" when describing the project as a
+  boundary. Do not imply an atomic transaction with a remote target.
+- Use "formal artifacts" or name the exact Lean or TLA+ result. Do not use
+  "formally verified implementation" without a model-to-code refinement proof.
+- Use "implementer draft" for Core 0.1. Do not call ETP an adopted standard or
+  imply interoperability with an independently maintained implementation.
 
 ## Claim rules
 

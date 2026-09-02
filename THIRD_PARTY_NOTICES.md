@@ -33,6 +33,13 @@ The Rust dependency graph is recorded in `Cargo.lock`. Each package remains
 subject to its own license and attribution requirements. A binary distributor
 must generate and review a license inventory for the exact release artifact.
 
+## IBM Plex fonts
+
+The website includes IBM Plex Sans and IBM Plex Mono web-font files. Copyright
+2017 IBM Corp. with Reserved Font Name "Plex". The font files are licensed
+under the SIL Open Font License, Version 1.1. The full license is in
+[`assets/fonts/OFL.txt`](./assets/fonts/OFL.txt).
+
 ## Development and verification tools
 
 Lean, TLA+ tools, Rust, Node.js, Python, SQLite, and Git are not relicensed by

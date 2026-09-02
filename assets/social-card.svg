@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title description">
+  <title id="title">Effect Transaction Protocol</title>
+  <desc id="description">A reference transaction from proposal to confirmed effect.</desc>
+  <style>
+    @font-face {
+      font-family: "ETP Sans";
+      src: url("fonts/IBMPlexSans-Regular.woff2") format("woff2");
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: "ETP Sans";
+      src: url("fonts/IBMPlexSans-SemiBold.woff2") format("woff2");
+      font-weight: 600;
+    }
+    @font-face {
+      font-family: "ETP Mono";
+      src: url("fonts/IBMPlexMono-Regular.woff2") format("woff2");
+      font-weight: 400;
+    }
+    .sans { font-family: "ETP Sans", Arial, sans-serif; }
+    .mono { font-family: "ETP Mono", Consolas, monospace; }
+  </style>
+  <rect width="1280" height="640" fill="#F4F7F5"/>
+  <path stroke="#C8D1CD" d="M640 0v640"/>
+
+  <g transform="translate(72 68) scale(2)">
+    <path fill="#121715" d="M2 5h14v4h-4v6h4v4H2V5Z"/>
+    <path fill="#0B6B57" d="M18 10h4v4h-4z"/>
+  </g>
+  <text class="sans" x="136" y="94" fill="#121715" font-size="25" font-weight="600">Effect Transaction Protocol</text>
+  <text class="mono" x="72" y="154" fill="#52605A" font-size="15">Core 0.1 / Implementer draft</text>
+
+  <text class="sans" x="72" y="252" fill="#121715" font-size="54" font-weight="600">
+    <tspan x="72" dy="0">Bind authorization to</tspan>
+    <tspan x="72" dy="64">one action and one</tspan>
+    <tspan x="72" dy="64">observed state.</tspan>
+  </text>
+  <text class="sans" x="72" y="510" fill="#52605A" font-size="20">
+    <tspan x="72" dy="0">A record protocol for external actions</tspan>
+    <tspan x="72" dy="30">proposed by untrusted agents.</tspan>
+  </text>
+  <text class="mono" x="72" y="594" fill="#52605A" font-size="15">github.com/billmedj/etp</text>
+
+  <text class="mono" x="704" y="82" fill="#52605A" font-size="14">Reference transaction</text>
+  <text class="mono" x="704" y="112" fill="#121715" font-size="15">vectors/positive-chain.json</text>
+  <path stroke="#AEBAB4" stroke-width="2" d="M724 156v352"/>
+
+  <g class="sans" font-size="18" fill="#121715">
+    <circle cx="724" cy="178" r="6" fill="#121715"/>
+    <text x="756" y="176" font-weight="600">Effect proposal</text>
+    <text class="mono" x="756" y="204" fill="#52605A" font-size="14">POST api.example.test/deployments</text>
+
+    <circle cx="724" cy="262" r="6" fill="#0B6B57"/>
+    <text x="756" y="260" font-weight="600">Authorization decision</text>
+    <text class="mono" x="756" y="288" fill="#0B6B57" font-size="14">allow / policy.allow</text>
+
+    <circle cx="724" cy="346" r="6" fill="#0B6B57"/>
+    <text x="756" y="344" font-weight="600">Execution grant</text>
+    <text class="mono" x="756" y="372" fill="#52605A" font-size="14">executor:edge-01 / uses 1</text>
+
+    <circle cx="724" cy="430" r="6" fill="#A45F00"/>
+    <text x="756" y="428" font-weight="600">Effect receipt</text>
+    <text class="mono" x="756" y="456" fill="#A45F00" font-size="14">unknown</text>
+
+    <circle cx="724" cy="514" r="8" fill="#F4F7F5" stroke="#0B6B57" stroke-width="4"/>
+    <text x="756" y="512" font-weight="600">Reconciliation 2</text>
+    <text class="mono" x="756" y="540" fill="#0B6B57" font-size="14">effect_confirmed</text>
+  </g>
+</svg>
