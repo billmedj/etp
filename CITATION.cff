@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "Cite the exact ETP software release or commit that you used."
+title: "Effect Transaction Protocol"
+type: software
+authors:
+  - family-names: "Medjani"
+    given-names: "Bilal"
+version: "0.1.0-alpha.1"
+repository-code: "https://github.com/billmedj/etp"
+url: "https://github.com/billmedj/etp"
+license: "Apache-2.0"
+abstract: >-
+  Effect Transaction Protocol defines a transaction boundary for external
+  effects proposed by untrusted agents. It binds a typed proposal to an
+  authorization decision, current-state checks, a single-use execution grant,
+  an outcome receipt, and append-only reconciliation.
+keywords:
+  - autonomous agents
+  - execution integrity
+  - transactional authorization
+  - effect protocol
+  - single-use grants
+  - reconciliation

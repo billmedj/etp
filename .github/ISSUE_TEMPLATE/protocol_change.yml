@@ -1,0 +1,48 @@
+name: Protocol change proposal
+description: Propose a normative ETP or effect-profile change.
+title: "[Protocol]: "
+labels:
+  - protocol
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: State the current failure or limitation.
+    validations:
+      required: true
+  - type: textarea
+    id: invariant
+    attributes:
+      label: Affected invariant or requirement
+      description: Link the relevant specification section when possible.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Define the wire, state, or effect-profile change.
+    validations:
+      required: true
+  - type: textarea
+    id: trust
+    attributes:
+      label: Trust and failure analysis
+      description: State trust assumptions, failure behavior, and recovery behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility and migration
+      description: Identify changed identifiers, accepted inputs, and migration steps.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Required evidence
+      description: List schemas, vectors, implementation changes, tests, and formal-model changes.
+    validations:
+      required: true

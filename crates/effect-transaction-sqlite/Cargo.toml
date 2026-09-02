@@ -1,0 +1,23 @@
+[package]
+name = "effect-transaction-sqlite"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license-file.workspace = true
+authors.workspace = true
+publish.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Durable SQLite lifecycle store for ETP"
+
+[dependencies]
+effect-transaction-core = { path = "../effect-transaction-core" }
+rusqlite.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+tempfile = "=3.23.0"
+
+[lints]
+workspace = true

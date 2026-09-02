@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/schemas/task-commitment-0.1.schema.json",
+  "title": "ETP task commitment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "commitment_id",
+    "principal",
+    "objective_digest",
+    "constraints_digest",
+    "authority_scope_digest",
+    "policy_epoch",
+    "configuration_epoch",
+    "created_at_ms",
+    "expires_at_ms"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "commitment_id": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/id" },
+    "principal": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/mediumText" },
+    "objective_digest": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "constraints_digest": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "authority_scope_digest": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "policy_epoch": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" },
+    "configuration_epoch": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" },
+    "created_at_ms": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" },
+    "expires_at_ms": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" }
+  }
+}

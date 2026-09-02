@@ -1,0 +1,96 @@
+{
+  "profile": "effect-transaction/core/0.1",
+  "status": "implementer-draft",
+  "record_version": 1,
+  "schemas": {
+    "task_commitment": "../schemas/task-commitment-0.1.schema.json",
+    "effect_proposal": "../schemas/effect-proposal-0.1.schema.json",
+    "authorization_decision": "../schemas/authorization-decision-0.1.schema.json",
+    "execution_grant": "../schemas/execution-grant-0.1.schema.json",
+    "effect_receipt": "../schemas/effect-receipt-0.1.schema.json",
+    "reconciliation_record": "../schemas/reconciliation-record-0.1.schema.json",
+    "transaction_bundle": "../schemas/transaction-bundle-0.1.schema.json",
+    "test_vector_envelope": "../schemas/test-vector-envelope-0.1.schema.json"
+  },
+  "canonicalization": {
+    "name": "effect-transaction-canonical-json-0.1",
+    "encoding": "utf-8",
+    "object_key_order": "unicode-scalar-lexicographic",
+    "integer_minimum": -9007199254740991,
+    "integer_maximum": 9007199254740991,
+    "floating_point_allowed": false,
+    "negative_zero_allowed": false,
+    "unicode_normalization": "none"
+  },
+  "digest": {
+    "algorithm": "sha-256",
+    "encoding": "sha256:lowercase-hex",
+    "input": "utf8(domain) || 0x00 || canonical_json(record)"
+  },
+  "domains": {
+    "task_commitment": "effect-transaction/0.1/task-commitment",
+    "effect_proposal": "effect-transaction/0.1/effect-proposal",
+    "authorization_decision": "effect-transaction/0.1/authorization-decision",
+    "execution_grant": "effect-transaction/0.1/execution-grant",
+    "effect_receipt": "effect-transaction/0.1/effect-receipt",
+    "reconciliation_record": "effect-transaction/0.1/reconciliation-record"
+  },
+  "chain": [
+    "task_commitment",
+    "effect_proposal",
+    "authorization_decision",
+    "execution_grant",
+    "effect_receipt",
+    "reconciliation_record"
+  ],
+  "decision_outcomes": ["allow", "deny", "review"],
+  "receipt_outcomes": ["not_dispatched", "succeeded", "failed", "unknown"],
+  "reconciliation_outcomes": [
+    "effect_confirmed",
+    "no_effect_confirmed",
+    "partial_effect",
+    "still_unknown",
+    "compensated"
+  ],
+  "grant": {
+    "uses": 1,
+    "maximum_lifetime_ms": 300000,
+    "one_grant_per_proposal": true,
+    "one_grant_per_decision": true,
+    "atomic_claim_required": true,
+    "durable_replay_tombstone_required": true,
+    "durable_attempt_journal_required": true
+  },
+  "limits": {
+    "identifier_utf8_bytes": 256,
+    "principal_and_audience_utf8_bytes": 512,
+    "profile_operation_and_reason_utf8_bytes": 256,
+    "target_utf8_bytes": 4096,
+    "maximum_evidence_hashes": 256,
+    "maximum_reason_codes": 64,
+    "nonce_base64url_characters_minimum": 22,
+    "nonce_base64url_characters_maximum": 128,
+    "nonce_entropy_bits_minimum": 128,
+    "transport_input_bytes": 1048576,
+    "canonical_nesting_depth": 64,
+    "canonical_value_nodes": 100000,
+    "maximum_reconciliation_records": 10000
+  },
+  "unknown_outcome": {
+    "reconciliation_required": true,
+    "blind_retry_forbidden": true,
+    "grant_reactivation_forbidden": true
+  },
+  "reconciliation": {
+    "receipt_outcome_required": "unknown",
+    "terminal_outcomes": [
+      "effect_confirmed",
+      "no_effect_confirmed",
+      "compensated"
+    ],
+    "continuable_outcomes": ["partial_effect", "still_unknown"],
+    "observation_time_not_before_receipt_completion": true
+  },
+  "complete_chain_validation_required": true,
+  "complete_mediation_required_for_executor_conformance": true
+}

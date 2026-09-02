@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/profiles/http-conditional-0.1.arguments.schema.json",
+  "title": "HTTP conditional profile 0.1: arguments",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile", "document_type", "version", "method", "media_type", "headers", "body_sha256"],
+  "properties": {
+    "profile": {"const": "effect-transaction/http-conditional/0.1"},
+    "document_type": {"const": "arguments"},
+    "version": {"const": 1},
+    "method": {"enum": ["PUT", "PATCH", "DELETE"]},
+    "media_type": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+(?:;[ -~]+)?$"},
+    "headers": {
+      "type": "object",
+      "maxProperties": 64,
+      "propertyNames": {"pattern": "^[a-z0-9!#$%&'*+.^_`|~-]+$", "maxLength": 128},
+      "additionalProperties": {"type": "string", "maxLength": 8192}
+    },
+    "body_sha256": {"type": "string", "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"},
+    "idempotency_key": {"type": "string", "minLength": 1, "maxLength": 256}
+  }
+}

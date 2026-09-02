@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/schemas/authorization-decision-0.1.schema.json",
+  "title": "ETP authorization decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "decision_id",
+    "proposal_hash",
+    "evidence_hashes",
+    "outcome",
+    "reason_codes",
+    "decided_at_ms",
+    "expires_at_ms"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "decision_id": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/id" },
+    "proposal_hash": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "evidence_hashes": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" }
+    },
+    "outcome": { "enum": ["allow", "deny", "review"] },
+    "reason_codes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/token" }
+    },
+    "decided_at_ms": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" },
+    "expires_at_ms": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "outcome": { "const": "allow" } },
+        "required": ["outcome"]
+      },
+      "then": {
+        "properties": { "evidence_hashes": { "type": "array", "minItems": 1 } }
+      }
+    }
+  ]
+}

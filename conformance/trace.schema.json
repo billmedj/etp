@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/conformance/trace.schema.json",
+  "title": "ETP conformance operation traces",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "profile", "base", "traces"],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1 },
+    "schema_version": { "const": 1 },
+    "profile": { "const": "effect-transaction/core/0.1" },
+    "base": { "const": "positive-chain.json" },
+    "traces": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/trace" }
+    }
+  },
+  "$defs": {
+    "trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "steps"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": { "$ref": "#/$defs/step" }
+        },
+        "observe": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["state", "claim_counts", "receipt_writes"] }
+        },
+        "oracle": { "const": "sequential_lifecycle" }
+      }
+    },
+    "step": {
+      "oneOf": [
+        { "$ref": "#/$defs/verify_fixture" },
+        { "$ref": "#/$defs/verify_transaction" },
+        { "$ref": "#/$defs/register_grant" },
+        { "$ref": "#/$defs/prepare_conflicting_grant" },
+        { "$ref": "#/$defs/claim_grant" },
+        { "$ref": "#/$defs/record_receipt" },
+        { "$ref": "#/$defs/mutate_transaction" },
+        { "$ref": "#/$defs/append_terminal_successor" },
+        { "$ref": "#/$defs/fill_reconciliation_history" },
+        { "$ref": "#/$defs/parse_transport" },
+        { "$ref": "#/$defs/canonicalize" }
+      ]
+    },
+    "verify_fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "fixture"],
+      "properties": {
+        "operation": { "const": "verify_fixture" },
+        "fixture": { "enum": ["positive_chain", "positive_not_dispatched"] }
+      }
+    },
+    "verify_transaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation"],
+      "properties": { "operation": { "const": "verify_transaction" } }
+    },
+    "register_grant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation"],
+      "properties": {
+        "operation": { "const": "register_grant" },
+        "document": { "enum": ["primary", "secondary"] }
+      }
+    },
+    "prepare_conflicting_grant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "uniqueness"],
+      "properties": {
+        "operation": { "const": "prepare_conflicting_grant" },
+        "uniqueness": { "enum": ["decision", "proposal"] }
+      }
+    },
+    "claim_grant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "attempt_id", "now"],
+      "properties": {
+        "operation": { "const": "claim_grant" },
+        "attempt_id": { "type": "string", "minLength": 1 },
+        "now": { "$ref": "#/$defs/trusted_time" },
+        "repeat": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "request_overrides": { "$ref": "#/$defs/claim_overrides" },
+        "allowed_error": { "type": "string", "minLength": 1 },
+        "require_error": { "type": "boolean" }
+      },
+      "allOf": [{
+        "if": {
+          "required": ["require_error"],
+          "properties": { "require_error": { "const": true } }
+        },
+        "then": { "required": ["allowed_error"] }
+      }]
+    },
+    "trusted_time": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source"],
+      "properties": {
+        "source": { "enum": ["receipt_claimed_at", "grant_not_before", "grant_expires_at"] },
+        "offset_ms": { "type": "integer", "minimum": -9007199254740991, "maximum": 9007199254740991 }
+      }
+    },
+    "claim_overrides": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "attempt_id": { "type": "string", "minLength": 1 },
+        "expected_audience": { "type": "string", "minLength": 1 },
+        "observed_policy_epoch": { "type": "integer" },
+        "observed_configuration_epoch": { "type": "integer" },
+        "observed_pre_state_digest": { "type": "string", "minLength": 1 },
+        "observed_resource_claim_digest": { "type": "string", "minLength": 1 },
+        "revoked": { "type": "boolean" }
+      }
+    },
+    "record_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation"],
+      "properties": {
+        "operation": { "const": "record_receipt" },
+        "repeat": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "overrides": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "attempt_id": { "type": "string", "minLength": 1 },
+            "observation_digest": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "mutate_transaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "changes"],
+      "properties": {
+        "operation": { "const": "mutate_transaction" },
+        "changes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["pointer", "replacement"],
+            "properties": {
+              "pointer": { "type": "string", "pattern": "^/" },
+              "replacement": true
+            }
+          }
+        }
+      }
+    },
+    "append_terminal_successor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation"],
+      "properties": { "operation": { "const": "append_terminal_successor" } }
+    },
+    "fill_reconciliation_history": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "count"],
+      "properties": {
+        "operation": { "const": "fill_reconciliation_history" },
+        "count": { "const": "maximum_plus_one" }
+      }
+    },
+    "parse_transport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "vector"],
+      "properties": {
+        "operation": { "const": "parse_transport" },
+        "vector": {
+          "enum": [
+            "duplicate_key", "escaped_duplicate_key", "invalid_utf8", "unescaped_control",
+            "protocol_c1_control", "depth_boundary", "depth_limit", "node_boundary",
+            "node_limit", "byte_limit", "unpaired_surrogate"
+          ]
+        }
+      }
+    },
+    "canonicalize": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "vector"],
+      "properties": {
+        "operation": { "const": "canonicalize" },
+        "vector": {
+          "enum": [
+            "object_order", "unicode_scalar_order", "escape_set", "negative_zero",
+            "fraction", "exponent", "unsafe_integer"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/profiles/authority-cose-sign1-ed25519-0.1.schema.json",
+  "title": "ETP COSE Sign1 and Ed25519 authority statement 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "authority_profile",
+    "statement_id",
+    "issuer",
+    "key_id",
+    "role",
+    "audience",
+    "record_profile",
+    "record_version",
+    "record_kind",
+    "record_digest",
+    "issued_at_ms",
+    "not_before_ms",
+    "expires_at_ms",
+    "authority_epoch",
+    "configuration_epoch"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "authority_profile": {
+      "const": "effect-transaction/authority/cose-sign1-ed25519/0.1"
+    },
+    "statement_id": { "$ref": "#/$defs/opaque256" },
+    "issuer": { "$ref": "#/$defs/opaque512" },
+    "key_id": { "$ref": "#/$defs/opaque256" },
+    "role": { "$ref": "#/$defs/token" },
+    "audience": { "$ref": "#/$defs/opaque512" },
+    "record_profile": { "$ref": "#/$defs/token" },
+    "record_version": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "record_kind": {
+      "enum": [
+        "task_commitment",
+        "effect_proposal",
+        "authorization_decision",
+        "execution_grant",
+        "effect_receipt",
+        "reconciliation_record"
+      ]
+    },
+    "record_digest": {
+      "type": "string",
+      "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"
+    },
+    "issued_at_ms": { "$ref": "#/$defs/safeInteger" },
+    "not_before_ms": { "$ref": "#/$defs/safeInteger" },
+    "expires_at_ms": { "$ref": "#/$defs/safeInteger" },
+    "authority_epoch": { "$ref": "#/$defs/safeInteger" },
+    "configuration_epoch": { "$ref": "#/$defs/safeInteger" }
+  },
+  "$defs": {
+    "safeInteger": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[a-z][a-z0-9._:/-]*$"
+    },
+    "opaque256": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "$comment": "Also enforce the 256-byte UTF-8 limit in the profile.",
+      "pattern": "^\\S(?:.*\\S)?$"
+    },
+    "opaque512": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "$comment": "Also enforce the 512-byte UTF-8 limit in the profile.",
+      "pattern": "^\\S(?:.*\\S)?$"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/profiles/http-conditional-0.1.resource-claim.schema.json",
+  "title": "HTTP conditional profile 0.1: resource claim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile", "document_type", "version", "origin", "target", "method"],
+  "properties": {
+    "profile": {"const": "effect-transaction/http-conditional/0.1"},
+    "document_type": {"const": "resource_claim"},
+    "version": {"const": 1},
+    "origin": {"type": "string", "minLength": 9, "maxLength": 512},
+    "target": {"type": "string", "minLength": 9, "maxLength": 4096},
+    "method": {"enum": ["PUT", "PATCH", "DELETE"]}
+  }
+}

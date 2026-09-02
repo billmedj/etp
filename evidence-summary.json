@@ -1,0 +1,77 @@
+{
+  "counts": {
+    "authority": {
+      "vectors": 1
+    },
+    "conformance": {
+      "cases": 77,
+      "categories": {
+        "binding": 30,
+        "canonicalization": 7,
+        "chain": 2,
+        "claim": 3,
+        "currentness": 6,
+        "issuance": 2,
+        "receipt": 8,
+        "reconciliation": 5,
+        "time": 3,
+        "transport": 11
+      }
+    },
+    "core_schemas": {
+      "envelope_schemas": 2,
+      "strict_schemas": 9
+    },
+    "effect_profiles": {
+      "adversarial_vectors": 46,
+      "descriptors": 2,
+      "positive_vectors": 4,
+      "registered_document_schemas": 14,
+      "total_vectors": 50
+    },
+    "implementations": {
+      "rust_crates": 5,
+      "rust_source_files": 7,
+      "typescript_source_and_test_files": 11
+    },
+    "lean": {
+      "sources": 1,
+      "theorems": 23
+    },
+    "tla": {
+      "models": 1
+    }
+  },
+  "protocol_profile": "effect-transaction/core/0.1",
+  "schema_version": 1,
+  "source_set_sha256": {
+    "authority_profile": "741043f41ee0e738e5b6b950a7db6ddb5cef6dcde962fd16e613aa31ee3d315d",
+    "conformance_contracts_and_oracle": "393bb827487a79b5b44288370e3f078cf3729ac5de1419ad2cf1f827c9c006e4",
+    "core_schema_contracts_and_oracle": "61547f33b5e27ca3a48e4b45dae20b673ade4493d3f1316dedad29c2414c7482",
+    "effect_profile_contracts_and_oracle": "5723609428c58dd7f9f7f2eafa587a47eb34a7ffe7caba100a8dbf1a114ebb48",
+    "implementation_sources": "2e7eb228387f89b8e23e9aa146e0e3a888779714a7498a6660e9913f07a1cd5c",
+    "lean_model_and_build_inputs": "fd06849de1126a4e8a721210b3ffa61f7439943b29ce5b3dfec86630d075d2a8",
+    "tla_model_config_and_runner": "911204519348791df030c330dd94b719703365e22cf18a5afc17fc213cf8cc5f"
+  },
+  "status": "implementer-draft",
+  "tla_observation": {
+    "boundary": "bounded model checking; not an implementation refinement proof or an unbounded liveness proof",
+    "configuration": {
+      "MaxEpoch": 2,
+      "MaxReconciliations": 3,
+      "MaxTime": 3,
+      "model_workers": 2,
+      "tlc_worker_threads": 1
+    },
+    "model": "EffectTransaction",
+    "result": {
+      "depth": 18,
+      "distinct_states": 65232,
+      "generated_states": 309556
+    },
+    "scope": "complete bounded search for the configured model",
+    "tla2tools_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "tla2tools_version": "v1.7.4",
+    "tlc_version": "2.19"
+  }
+}

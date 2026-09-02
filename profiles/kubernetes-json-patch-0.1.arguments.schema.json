@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/profiles/kubernetes-json-patch-0.1.arguments.schema.json",
+  "title": "Kubernetes JSON Patch profile 0.1: arguments",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile", "document_type", "version", "media_type", "patch_utf8_base64url", "patch_sha256", "operations"],
+  "properties": {
+    "profile": {"const": "effect-transaction/kubernetes-json-patch/0.1"},
+    "document_type": {"const": "arguments"},
+    "version": {"const": 1},
+    "media_type": {"const": "application/json-patch+json"},
+    "patch_utf8_base64url": {"type": "string", "minLength": 3, "maxLength": 1398102, "pattern": "^[A-Za-z0-9_-]+$"},
+    "patch_sha256": {"type": "string", "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"},
+    "operations": {"type": "array", "minItems": 3, "maxItems": 256, "items": {"$ref": "#/$defs/operation"}}
+  },
+  "$defs": {
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "path"],
+      "properties": {
+        "op": {"enum": ["add", "remove", "replace", "test"]},
+        "path": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "value": {}
+      },
+      "allOf": [
+        {"if": {"properties": {"op": {"enum": ["add", "replace", "test"]}}}, "then": {"required": ["value"]}},
+        {"if": {"properties": {"op": {"const": "remove"}}}, "then": {"not": {"required": ["value"]}}}
+      ]
+    }
+  }
+}

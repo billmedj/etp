@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/schemas/effect-proposal-0.1.schema.json",
+  "title": "ETP effect proposal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "proposal_id",
+    "commitment_hash",
+    "effect_profile",
+    "operation",
+    "target",
+    "arguments_digest",
+    "expected_effect_digest",
+    "pre_state_digest",
+    "resource_claim_digest",
+    "created_at_ms",
+    "expires_at_ms"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "proposal_id": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/id" },
+    "commitment_hash": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "effect_profile": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/shortText" },
+    "operation": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/token" },
+    "target": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonemptyText" },
+    "arguments_digest": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "expected_effect_digest": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "pre_state_digest": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "resource_claim_digest": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "created_at_ms": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" },
+    "expires_at_ms": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" }
+  }
+}

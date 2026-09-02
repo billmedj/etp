@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/schemas/effect-receipt-0.1.schema.json",
+  "title": "ETP effect receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "receipt_id",
+    "proposal_hash",
+    "grant_hash",
+    "attempt_id",
+    "claimed_at_ms",
+    "dispatched_at_ms",
+    "completed_at_ms",
+    "outcome",
+    "observation_digest"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "receipt_id": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/id" },
+    "proposal_hash": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "grant_hash": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "attempt_id": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/id" },
+    "claimed_at_ms": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" },
+    "dispatched_at_ms": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" }
+      ]
+    },
+    "completed_at_ms": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" },
+    "outcome": { "enum": ["not_dispatched", "succeeded", "failed", "unknown"] },
+    "observation_digest": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "outcome": { "const": "not_dispatched" } },
+        "required": ["outcome"]
+      },
+      "then": {
+        "properties": { "dispatched_at_ms": { "type": "null" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "outcome": { "enum": ["succeeded", "failed"] } },
+        "required": ["outcome"]
+      },
+      "then": {
+        "properties": {
+          "dispatched_at_ms": {
+            "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "profile": "effect-transaction/core/0.1",
+  "description": "Cross-language canonical JSON corpus for ordering, Unicode, escapes, and safe integers.",
+  "cases": [
+    {
+      "name": "object key order",
+      "value": { "z": 1, "a": 2 },
+      "canonical": "{\"a\":2,\"z\":1}"
+    },
+    {
+      "name": "unicode scalar key order",
+      "value": { "😀": 1, "é": 2 },
+      "canonical": "{\"é\":2,\"😀\":1}"
+    },
+    {
+      "name": "specified short escapes",
+      "value": "line\n\t\b\f\r\"\\",
+      "canonical": "\"line\\n\\t\\b\\f\\r\\\"\\\\\""
+    },
+    {
+      "name": "safe integer boundaries",
+      "value": [-9007199254740991, 0, 9007199254740991],
+      "canonical": "[-9007199254740991,0,9007199254740991]"
+    }
+  ]
+}

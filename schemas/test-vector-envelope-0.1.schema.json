@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/schemas/test-vector-envelope-0.1.schema.json",
+  "title": "ETP test vector envelope",
+  "description": "Test metadata, one lifecycle bundle, and the expected verification result.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile", "transaction", "expected"],
+  "properties": {
+    "profile": { "const": "effect-transaction/core/0.1" },
+    "description": {
+      "type": "string",
+      "maxLength": 4096,
+      "pattern": "^(?!.*[\\u0000-\\u001F\\u007F-\\u009F]).*$"
+    },
+    "transaction": {
+      "$ref": "https://billmedj.github.io/etp/schemas/transaction-bundle-0.1.schema.json"
+    },
+    "expected": { "$ref": "#/$defs/verificationResult" }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"
+    },
+    "nullableDigest": {
+      "oneOf": [
+        { "$ref": "#/$defs/digest" },
+        { "type": "null" }
+      ]
+    },
+    "verificationResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commitment_hash",
+        "proposal_hash",
+        "decision_hash",
+        "grant_hash",
+        "receipt_hash",
+        "reconciliation_hashes",
+        "state"
+      ],
+      "properties": {
+        "commitment_hash": { "$ref": "#/$defs/digest" },
+        "proposal_hash": { "$ref": "#/$defs/digest" },
+        "decision_hash": { "$ref": "#/$defs/digest" },
+        "grant_hash": { "$ref": "#/$defs/nullableDigest" },
+        "receipt_hash": { "$ref": "#/$defs/nullableDigest" },
+        "reconciliation_hashes": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": { "$ref": "#/$defs/digest" }
+        },
+        "state": {
+          "enum": [
+            "decided",
+            "granted",
+            "not_dispatched",
+            "succeeded",
+            "failed",
+            "unknown",
+            "effect_confirmed",
+            "no_effect_confirmed",
+            "partial_effect",
+            "still_unknown",
+            "compensated"
+          ]
+        }
+      }
+    }
+  }
+}

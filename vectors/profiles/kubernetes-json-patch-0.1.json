@@ -1,0 +1,200 @@
+{
+  "profile": "effect-transaction/kubernetes-json-patch/0.1",
+  "vector_version": 1,
+  "positive": [
+    {
+      "name": "namespaced-deployment-replica-change",
+      "expected_receipt_outcome": "unknown",
+      "context": {
+        "target": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api?uid=11111111-2222-3333-4444-555555555555",
+        "grant_id": "grant-k8s-001"
+      },
+      "documents": {
+        "arguments": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "arguments",
+          "version": 1,
+          "media_type": "application/json-patch+json",
+          "patch_utf8_base64url": "W3sib3AiOiJ0ZXN0IiwicGF0aCI6Ii9tZXRhZGF0YS91aWQiLCJ2YWx1ZSI6IjExMTExMTExLTIyMjItMzMzMy00NDQ0LTU1NTU1NTU1NTU1NSJ9LHsib3AiOiJ0ZXN0IiwicGF0aCI6Ii9tZXRhZGF0YS9yZXNvdXJjZVZlcnNpb24iLCJ2YWx1ZSI6IjQyIn0seyJvcCI6InJlcGxhY2UiLCJwYXRoIjoiL3NwZWMvcmVwbGljYXMiLCJ2YWx1ZSI6M31d",
+          "patch_sha256": "sha256:8eb5a8df657882c1cfa2128b7c469fa94e130e03bb4afce31b5962be29030a91",
+          "operations": [
+            {"op": "test", "path": "/metadata/uid", "value": "11111111-2222-3333-4444-555555555555"},
+            {"op": "test", "path": "/metadata/resourceVersion", "value": "42"},
+            {"op": "replace", "path": "/spec/replicas", "value": 3}
+          ]
+        },
+        "pre_state": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "pre_state",
+          "version": 1,
+          "cluster_trust_domain": "prod-a.corp.example",
+          "api_path": "/apis/apps/v1/namespaces/payments/deployments/api",
+          "uid": "11111111-2222-3333-4444-555555555555",
+          "resource_version": "42",
+          "object_sha256": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "resource_claim": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "resource_claim",
+          "version": 1,
+          "cluster_trust_domain": "prod-a.corp.example",
+          "api_path": "/apis/apps/v1/namespaces/payments/deployments/api",
+          "uid": "11111111-2222-3333-4444-555555555555",
+          "write_set": ["/spec/replicas"]
+        },
+        "expected_effect": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "expected_effect",
+          "version": 1,
+          "postconditions": [
+            {"path": "/spec/replicas", "operator": "equals", "expected_sha256": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}
+          ]
+        },
+        "dispatch_evidence": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "dispatch_evidence",
+          "version": 1,
+          "attempt_id": "attempt-k8s-001",
+          "grant_id": "grant-k8s-001",
+          "target": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api?uid=11111111-2222-3333-4444-555555555555",
+          "api_server_identity": "spiffe://corp.example/k8s/prod-a",
+          "patch_sha256": "sha256:8eb5a8df657882c1cfa2128b7c469fa94e130e03bb4afce31b5962be29030a91",
+          "journaled_at_ms": 4000,
+          "first_patch_byte_at_ms": 4001
+        },
+        "observation_evidence": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "observation_evidence",
+          "version": 1,
+          "attempt_id": "attempt-k8s-001",
+          "target": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api?uid=11111111-2222-3333-4444-555555555555",
+          "observed_at_ms": 4010,
+          "transport_outcome": "unverifiable",
+          "postconditions": []
+        },
+        "reconciliation_evidence": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "reconciliation_evidence",
+          "version": 1,
+          "attempt_id": "attempt-k8s-001",
+          "target": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api?uid=11111111-2222-3333-4444-555555555555",
+          "observed_at_ms": 4020,
+          "uid": "11111111-2222-3333-4444-555555555555",
+          "resource_version": "43",
+          "object_sha256": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "attribution": {"kind": "audit_event_id", "value": "audit-001"},
+          "postconditions": [
+            {"path": "/spec/replicas", "established": true, "observed_sha256": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "status-subresource-change",
+      "expected_receipt_outcome": "succeeded",
+      "context": {
+        "target": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api/status?uid=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+        "grant_id": "grant-k8s-002"
+      },
+      "documents": {
+        "arguments": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "arguments",
+          "version": 1,
+          "media_type": "application/json-patch+json",
+          "patch_utf8_base64url": "W3sib3AiOiJ0ZXN0IiwicGF0aCI6Ii9tZXRhZGF0YS91aWQiLCJ2YWx1ZSI6ImFhYWFhYWFhLWJiYmItY2NjYy1kZGRkLWVlZWVlZWVlZWVlZSJ9LHsib3AiOiJ0ZXN0IiwicGF0aCI6Ii9tZXRhZGF0YS9yZXNvdXJjZVZlcnNpb24iLCJ2YWx1ZSI6IjkwMDEifSx7Im9wIjoicmVwbGFjZSIsInBhdGgiOiIvc3RhdHVzL2F2YWlsYWJsZVJlcGxpY2FzIiwidmFsdWUiOjR9XQ",
+          "patch_sha256": "sha256:ed576ff2e82fb28d66fcbce7f3e2856b6d65c8612ca4c8d08c01e9b3f1be9ec5",
+          "operations": [
+            {"op": "test", "path": "/metadata/uid", "value": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"},
+            {"op": "test", "path": "/metadata/resourceVersion", "value": "9001"},
+            {"op": "replace", "path": "/status/availableReplicas", "value": 4}
+          ]
+        },
+        "pre_state": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "pre_state",
+          "version": 1,
+          "cluster_trust_domain": "prod-a.corp.example",
+          "api_path": "/apis/apps/v1/namespaces/payments/deployments/api/status",
+          "uid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+          "resource_version": "9001",
+          "object_sha256": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "resource_claim": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "resource_claim",
+          "version": 1,
+          "cluster_trust_domain": "prod-a.corp.example",
+          "api_path": "/apis/apps/v1/namespaces/payments/deployments/api/status",
+          "uid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+          "write_set": ["/status/availableReplicas"]
+        },
+        "expected_effect": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "expected_effect",
+          "version": 1,
+          "postconditions": [
+            {"path": "/status/availableReplicas", "operator": "equals", "expected_sha256": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"}
+          ]
+        },
+        "dispatch_evidence": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "dispatch_evidence",
+          "version": 1,
+          "attempt_id": "attempt-k8s-002",
+          "grant_id": "grant-k8s-002",
+          "target": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api/status?uid=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+          "api_server_identity": "spiffe://corp.example/k8s/prod-a",
+          "patch_sha256": "sha256:ed576ff2e82fb28d66fcbce7f3e2856b6d65c8612ca4c8d08c01e9b3f1be9ec5",
+          "journaled_at_ms": 5000,
+          "first_patch_byte_at_ms": 5001
+        },
+        "observation_evidence": {
+          "profile": "effect-transaction/kubernetes-json-patch/0.1",
+          "document_type": "observation_evidence",
+          "version": 1,
+          "attempt_id": "attempt-k8s-002",
+          "target": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api/status?uid=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+          "observed_at_ms": 5010,
+          "transport_outcome": "response",
+          "http_status": 200,
+          "uid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+          "resource_version": "9002",
+          "object_sha256": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "attribution": {"kind": "mutation_marker", "value": "marker-k8s-002"},
+          "postconditions": [
+            {"path": "/status/availableReplicas", "established": true, "observed_sha256": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"}
+          ]
+        }
+      }
+    }
+  ],
+  "adversarial": [
+    {"name": "reject-target-uid-mismatch", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set", "path": ["context", "target"], "value": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api?uid=99999999-2222-3333-4444-555555555555"}, {"op": "set", "path": ["documents", "dispatch_evidence", "target"], "value": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api?uid=99999999-2222-3333-4444-555555555555"}, {"op": "set", "path": ["documents", "observation_evidence", "target"], "value": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api?uid=99999999-2222-3333-4444-555555555555"}, {"op": "set", "path": ["documents", "reconciliation_evidence", "target"], "value": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api?uid=99999999-2222-3333-4444-555555555555"}], "expect_code": "K8S_TARGET_UID_MISMATCH"},
+    {"name": "reject-collection-target", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set_target_everywhere", "value": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments?uid=11111111-2222-3333-4444-555555555555"}], "expect_code": "K8S_TARGET_COLLECTION"},
+    {"name": "reject-exec-subresource", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set_target_everywhere", "value": "k8s://prod-a.corp.example/api/v1/namespaces/payments/pods/api/exec?uid=11111111-2222-3333-4444-555555555555"}], "expect_code": "K8S_TARGET_FORBIDDEN_ENDPOINT"},
+    {"name": "reject-proxy-endpoint", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set_target_everywhere", "value": "k8s://prod-a.corp.example/api/v1/proxy/nodes/api?uid=11111111-2222-3333-4444-555555555555"}], "expect_code": "K8S_TARGET_FORBIDDEN_ENDPOINT"},
+    {"name": "reject-extra-query", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set_target_everywhere", "value": "k8s://prod-a.corp.example/apis/apps/v1/namespaces/payments/deployments/api?uid=11111111-2222-3333-4444-555555555555&dryRun=All"}], "expect_code": "K8S_TARGET_QUERY"},
+    {"name": "reject-noncanonical-trust-domain-case", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set_target_everywhere", "value": "k8s://PROD-A.corp.example/apis/apps/v1/namespaces/payments/deployments/api?uid=11111111-2222-3333-4444-555555555555"}], "expect_code": "K8S_TARGET_TRUST_DOMAIN"},
+    {"name": "reject-cluster-mismatch", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set", "path": ["documents", "pre_state", "cluster_trust_domain"], "value": "prod-b.corp.example"}], "expect_code": "K8S_CLUSTER_MISMATCH"},
+    {"name": "reject-leading-tests-reversed", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "rewrite_patch", "value": [{"op": "test", "path": "/metadata/resourceVersion", "value": "42"}, {"op": "test", "path": "/metadata/uid", "value": "11111111-2222-3333-4444-555555555555"}, {"op": "replace", "path": "/spec/replicas", "value": 3}]}], "expect_code": "K8S_PATCH_UID_TEST"},
+    {"name": "reject-wrong-resource-version-test", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "rewrite_patch", "value": [{"op": "test", "path": "/metadata/uid", "value": "11111111-2222-3333-4444-555555555555"}, {"op": "test", "path": "/metadata/resourceVersion", "value": "43"}, {"op": "replace", "path": "/spec/replicas", "value": 3}]}], "expect_code": "K8S_PATCH_RV_TEST"},
+    {"name": "reject-duplicate-patch-member", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "rewrite_patch_raw", "value": "[{\"op\":\"test\",\"path\":\"/metadata/uid\",\"value\":\"11111111-2222-3333-4444-555555555555\"},{\"op\":\"test\",\"path\":\"/metadata/resourceVersion\",\"value\":\"42\"},{\"op\":\"replace\",\"op\":\"remove\",\"path\":\"/spec/replicas\"}]"}], "expect_code": "PROFILE_DUPLICATE_KEY"},
+    {"name": "reject-uid-mutation", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "rewrite_patch", "value": [{"op": "test", "path": "/metadata/uid", "value": "11111111-2222-3333-4444-555555555555"}, {"op": "test", "path": "/metadata/resourceVersion", "value": "42"}, {"op": "replace", "path": "/metadata/uid", "value": "attacker"}]}], "expect_code": "K8S_PATCH_IMMUTABLE_METADATA"},
+    {"name": "reject-metadata-ancestor-replacement", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "rewrite_patch", "value": [{"op": "test", "path": "/metadata/uid", "value": "11111111-2222-3333-4444-555555555555"}, {"op": "test", "path": "/metadata/resourceVersion", "value": "42"}, {"op": "replace", "path": "/metadata", "value": {"name": "api"}}]}, {"op": "set", "path": ["documents", "resource_claim", "write_set"], "value": ["/metadata"]}], "expect_code": "K8S_PATCH_IMMUTABLE_METADATA"},
+    {"name": "reject-write-outside-claim", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "rewrite_patch", "value": [{"op": "test", "path": "/metadata/uid", "value": "11111111-2222-3333-4444-555555555555"}, {"op": "test", "path": "/metadata/resourceVersion", "value": "42"}, {"op": "replace", "path": "/spec/template/spec/serviceAccountName", "value": "admin"}]}], "expect_code": "K8S_PATCH_WRITE_SET"},
+    {"name": "reject-move-operation", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "rewrite_patch", "value": [{"op": "test", "path": "/metadata/uid", "value": "11111111-2222-3333-4444-555555555555"}, {"op": "test", "path": "/metadata/resourceVersion", "value": "42"}, {"op": "move", "from": "/metadata/name", "path": "/spec/replicas"}]}], "expect_code": "K8S_PATCH_OPERATION"},
+    {"name": "reject-invalid-json-pointer", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "rewrite_patch", "value": [{"op": "test", "path": "/metadata/uid", "value": "11111111-2222-3333-4444-555555555555"}, {"op": "test", "path": "/metadata/resourceVersion", "value": "42"}, {"op": "replace", "path": "/spec/~2replicas", "value": 3}]}], "expect_code": "K8S_JSON_POINTER"},
+    {"name": "reject-unsorted-write-set", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set", "path": ["documents", "resource_claim", "write_set"], "value": ["/spec/template", "/spec/replicas"]}], "expect_code": "K8S_WRITE_SET_CANONICAL"},
+    {"name": "reject-overbroad-unused-write-set", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set", "path": ["documents", "resource_claim", "write_set"], "value": ["/spec/replicas", "/spec/template"]}], "expect_code": "K8S_PATCH_WRITE_SET_MISMATCH"},
+    {"name": "reject-patch-byte-tamper", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set", "path": ["documents", "arguments", "patch_utf8_base64url"], "value": "W10"}], "expect_code": "K8S_PATCH_DIGEST"},
+    {"name": "reject-dispatch-patch-mismatch", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set", "path": ["documents", "dispatch_evidence", "patch_sha256"], "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}], "expect_code": "K8S_DISPATCH_PATCH_MISMATCH"},
+    {"name": "reject-dispatch-before-journal", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set", "path": ["documents", "dispatch_evidence", "first_patch_byte_at_ms"], "value": 3999}], "expect_code": "K8S_DISPATCH_ORDER"},
+    {"name": "reject-observed-uid-mismatch", "base": "status-subresource-change", "mutations": [{"op": "set", "path": ["documents", "observation_evidence", "uid"], "value": "99999999-2222-3333-4444-555555555555"}], "expect_code": "K8S_OBSERVED_UID_MISMATCH"},
+    {"name": "reject-observation-before-dispatch", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set", "path": ["documents", "observation_evidence", "observed_at_ms"], "value": 4000}], "expect_code": "K8S_OBSERVATION_ORDER"},
+    {"name": "reject-postcondition-mismatch", "base": "status-subresource-change", "mutations": [{"op": "set", "path": ["documents", "observation_evidence", "postconditions", 0, "observed_sha256"], "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}], "expect_code": "K8S_POSTCONDITION_MISMATCH"},
+    {"name": "reject-server-error-as-success", "base": "status-subresource-change", "mutations": [{"op": "set", "path": ["documents", "observation_evidence", "http_status"], "value": 500}], "expect_code": "K8S_RESPONSE_STATUS"},
+    {"name": "reject-all-zero-digest", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set", "path": ["documents", "pre_state", "object_sha256"], "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"}], "expect_code": "PROFILE_SCHEMA"},
+    {"name": "reject-unattributed-reconciliation", "base": "namespaced-deployment-replica-change", "mutations": [{"op": "set", "path": ["documents", "reconciliation_evidence", "attribution"], "value": {"kind": "none", "value": null}}], "expect_code": "K8S_RECONCILIATION_UNATTRIBUTED"}
+  ]
+}

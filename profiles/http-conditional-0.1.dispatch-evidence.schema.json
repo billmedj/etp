@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/profiles/http-conditional-0.1.dispatch-evidence.schema.json",
+  "title": "HTTP conditional profile 0.1: dispatch evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile", "document_type", "version", "attempt_id", "grant_id", "target", "method", "condition", "body_sha256", "journaled_at_ms", "first_request_byte_at_ms", "redirect_count"],
+  "properties": {
+    "profile": {"const": "effect-transaction/http-conditional/0.1"},
+    "document_type": {"const": "dispatch_evidence"},
+    "version": {"const": 1},
+    "attempt_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "grant_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "target": {"type": "string", "minLength": 9, "maxLength": 4096},
+    "method": {"enum": ["PUT", "PATCH", "DELETE"]},
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "value"],
+      "properties": {
+        "name": {"enum": ["if-match", "if-none-match"]},
+        "value": {"type": "string", "minLength": 1, "maxLength": 1024}
+      }
+    },
+    "body_sha256": {"type": "string", "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"},
+    "journaled_at_ms": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+    "first_request_byte_at_ms": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+    "redirect_count": {"const": 0}
+  }
+}

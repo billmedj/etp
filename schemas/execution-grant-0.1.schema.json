@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/schemas/execution-grant-0.1.schema.json",
+  "title": "ETP execution grant",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "grant_id",
+    "proposal_hash",
+    "decision_hash",
+    "audience",
+    "not_before_ms",
+    "expires_at_ms",
+    "uses",
+    "nonce"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "grant_id": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/id" },
+    "proposal_hash": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "decision_hash": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "audience": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/mediumText" },
+    "not_before_ms": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" },
+    "expires_at_ms": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" },
+    "uses": { "const": 1 },
+    "nonce": {
+      "type": "string",
+      "minLength": 22,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_-]+$"
+    }
+  }
+}

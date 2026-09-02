@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/profiles/kubernetes-json-patch-0.1.resource-claim.schema.json",
+  "title": "Kubernetes JSON Patch profile 0.1: resource claim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile", "document_type", "version", "cluster_trust_domain", "api_path", "uid", "write_set"],
+  "properties": {
+    "profile": {"const": "effect-transaction/kubernetes-json-patch/0.1"},
+    "document_type": {"const": "resource_claim"},
+    "version": {"const": 1},
+    "cluster_trust_domain": {"type": "string", "minLength": 1, "maxLength": 253},
+    "api_path": {"type": "string", "minLength": 1, "maxLength": 4096},
+    "uid": {"type": "string", "minLength": 8, "maxLength": 128},
+    "write_set": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 254,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 4096}
+    }
+  }
+}

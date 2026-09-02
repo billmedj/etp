@@ -1,0 +1,27 @@
+{
+  "boundary": "Bounded model checking is not an implementation refinement proof or an unbounded liveness proof.",
+  "configuration": {
+    "MaxEpoch": 2,
+    "MaxReconciliations": 3,
+    "MaxTime": 3,
+    "model_workers": 2,
+    "tlc_worker_threads": 1
+  },
+  "inputs": {
+    "config_sha256": "a08965be4eaa3ffd14ddc3fe8f9cb93451b1e5679305ec406f292a149dfb56d0",
+    "model_sha256": "f24978b3c6397a4ac96267b1413f96a8401d13e1359f125cc25a1f242d0be7c2",
+    "tla2tools_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+    "tla2tools_version": "v1.7.4",
+    "tlc_version": "2.19"
+  },
+  "model": "EffectTransaction",
+  "result": {
+    "complete_bounded_search": true,
+    "depth": 18,
+    "distinct_states": 65232,
+    "generated_states": 309556,
+    "states_left_on_queue": 0,
+    "status": "pass"
+  },
+  "schema_version": 1
+}

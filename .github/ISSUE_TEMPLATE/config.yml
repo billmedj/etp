@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security report
+    url: https://github.com/billmedj/etp/security/advisories/new
+    about: Report a vulnerability through a private GitHub security advisory.
+  - name: Support policy
+    url: https://github.com/billmedj/etp/blob/main/SUPPORT.md
+    about: Read the support scope before opening an issue.

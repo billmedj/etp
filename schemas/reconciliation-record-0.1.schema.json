@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/schemas/reconciliation-record-0.1.schema.json",
+  "title": "ETP reconciliation record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "reconciliation_id",
+    "receipt_hash",
+    "sequence",
+    "parent_reconciliation_hash",
+    "observed_at_ms",
+    "outcome",
+    "evidence_digest"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "reconciliation_id": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/id" },
+    "receipt_hash": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "parent_reconciliation_hash": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" }
+      ]
+    },
+    "observed_at_ms": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/nonnegativeInteger" },
+    "outcome": {
+      "enum": [
+        "effect_confirmed",
+        "no_effect_confirmed",
+        "partial_effect",
+        "still_unknown",
+        "compensated"
+      ]
+    },
+    "evidence_digest": { "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "sequence": { "const": 1 } },
+        "required": ["sequence"]
+      },
+      "then": {
+        "properties": { "parent_reconciliation_hash": { "type": "null" } }
+      },
+      "else": {
+        "properties": {
+          "sequence": { "type": "integer", "minimum": 2 },
+          "parent_reconciliation_hash": {
+            "$ref": "https://billmedj.github.io/etp/schemas/common-0.1.schema.json#/$defs/digest"
+          }
+        }
+      }
+    }
+  ]
+}

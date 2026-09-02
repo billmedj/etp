@@ -1,0 +1,19 @@
+{
+  "profile": "effect-transaction/kubernetes-json-patch/0.1",
+  "status": "implementer-draft",
+  "record_version": 1,
+  "schemas": {
+    "arguments": "kubernetes-json-patch-0.1.arguments.schema.json",
+    "pre_state": "kubernetes-json-patch-0.1.pre-state.schema.json",
+    "resource_claim": "kubernetes-json-patch-0.1.resource-claim.schema.json",
+    "expected_effect": "kubernetes-json-patch-0.1.expected-effect.schema.json",
+    "dispatch_evidence": "kubernetes-json-patch-0.1.dispatch-evidence.schema.json",
+    "observation_evidence": "kubernetes-json-patch-0.1.observation-evidence.schema.json",
+    "reconciliation_evidence": "kubernetes-json-patch-0.1.reconciliation-evidence.schema.json"
+  },
+  "target_scheme": "k8s",
+  "patch_media_type": "application/json-patch+json",
+  "required_leading_tests": ["/metadata/uid", "/metadata/resourceVersion"],
+  "allowed_patch_operations": ["add", "remove", "replace", "test"],
+  "blind_retry_with_refreshed_state": "forbidden"
+}

@@ -1,0 +1,183 @@
+{
+  "profile": "effect-transaction/http-conditional/0.1",
+  "vector_version": 1,
+  "positive": [
+    {
+      "name": "existing-put-with-strong-etag",
+      "expected_receipt_outcome": "unknown",
+      "context": {
+        "target": "https://api.example.com/v1/widgets/42?a=1&b=2",
+        "grant_id": "grant-http-001"
+      },
+      "documents": {
+        "arguments": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "arguments",
+          "version": 1,
+          "method": "PUT",
+          "media_type": "application/json",
+          "headers": {"accept": "application/json", "x-request-class": "etp"},
+          "body_sha256": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "idempotency_key": "grant-http-001"
+        },
+        "pre_state": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "pre_state",
+          "version": 1,
+          "target": "https://api.example.com/v1/widgets/42?a=1&b=2",
+          "exists": true,
+          "strong_etag": "\"revision-17\""
+        },
+        "resource_claim": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "resource_claim",
+          "version": 1,
+          "origin": "https://api.example.com",
+          "target": "https://api.example.com/v1/widgets/42?a=1&b=2",
+          "method": "PUT"
+        },
+        "expected_effect": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "expected_effect",
+          "version": 1,
+          "allowed_status_classes": [2],
+          "response_body_sha256": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "postconditions": [
+            {"name": "widget-state", "operator": "equals", "expected_sha256": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}
+          ]
+        },
+        "dispatch_evidence": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "dispatch_evidence",
+          "version": 1,
+          "attempt_id": "attempt-http-001",
+          "grant_id": "grant-http-001",
+          "target": "https://api.example.com/v1/widgets/42?a=1&b=2",
+          "method": "PUT",
+          "condition": {"name": "if-match", "value": "\"revision-17\""},
+          "body_sha256": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "journaled_at_ms": 2000,
+          "first_request_byte_at_ms": 2001,
+          "redirect_count": 0
+        },
+        "observation_evidence": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "observation_evidence",
+          "version": 1,
+          "attempt_id": "attempt-http-001",
+          "target": "https://api.example.com/v1/widgets/42?a=1&b=2",
+          "observed_at_ms": 2010,
+          "transport_outcome": "lost",
+          "postconditions": []
+        },
+        "reconciliation_evidence": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "reconciliation_evidence",
+          "version": 1,
+          "attempt_id": "attempt-http-001",
+          "target": "https://api.example.com/v1/widgets/42?a=1&b=2",
+          "observed_at_ms": 2020,
+          "attribution": {"kind": "target_transaction_id", "value": "txn-widget-900"},
+          "postconditions": [
+            {"name": "widget-state", "established": true, "observed_sha256": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "create-only-put",
+      "expected_receipt_outcome": "succeeded",
+      "context": {
+        "target": "https://api.example.com/v1/widgets/new",
+        "grant_id": "grant-http-002"
+      },
+      "documents": {
+        "arguments": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "arguments",
+          "version": 1,
+          "method": "PUT",
+          "media_type": "application/json",
+          "headers": {},
+          "body_sha256": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "idempotency_key": "grant-http-002"
+        },
+        "pre_state": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "pre_state",
+          "version": 1,
+          "target": "https://api.example.com/v1/widgets/new",
+          "exists": false
+        },
+        "resource_claim": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "resource_claim",
+          "version": 1,
+          "origin": "https://api.example.com",
+          "target": "https://api.example.com/v1/widgets/new",
+          "method": "PUT"
+        },
+        "expected_effect": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "expected_effect",
+          "version": 1,
+          "allowed_status_classes": [2],
+          "postconditions": [
+            {"name": "widget-created", "operator": "present", "expected_sha256": null}
+          ]
+        },
+        "dispatch_evidence": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "dispatch_evidence",
+          "version": 1,
+          "attempt_id": "attempt-http-002",
+          "grant_id": "grant-http-002",
+          "target": "https://api.example.com/v1/widgets/new",
+          "method": "PUT",
+          "condition": {"name": "if-none-match", "value": "*"},
+          "body_sha256": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "journaled_at_ms": 3000,
+          "first_request_byte_at_ms": 3001,
+          "redirect_count": 0
+        },
+        "observation_evidence": {
+          "profile": "effect-transaction/http-conditional/0.1",
+          "document_type": "observation_evidence",
+          "version": 1,
+          "attempt_id": "attempt-http-002",
+          "target": "https://api.example.com/v1/widgets/new",
+          "observed_at_ms": 3010,
+          "transport_outcome": "response",
+          "status": 201,
+          "response_sha256": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "application_transaction_id": "grant-http-002",
+          "postconditions": [
+            {"name": "widget-created", "established": true, "observed_sha256": null}
+          ]
+        }
+      }
+    }
+  ],
+  "adversarial": [
+    {"name": "reject-http-scheme", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set_target_everywhere", "value": "http://api.example.com/v1/widgets/42?a=1&b=2"}], "expect_code": "HTTP_TARGET_SCHEME"},
+    {"name": "reject-user-information", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set_target_everywhere", "value": "https://user@api.example.com/v1/widgets/42?a=1&b=2"}], "expect_code": "HTTP_TARGET_USERINFO"},
+    {"name": "reject-fragment", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set_target_everywhere", "value": "https://api.example.com/v1/widgets/42?a=1&b=2#fragment"}], "expect_code": "HTTP_TARGET_FRAGMENT"},
+    {"name": "reject-unicode-host-source", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set_target_everywhere", "value": "https://münich.example/v1/widgets/42?a=1&b=2"}], "expect_code": "HTTP_TARGET_ASCII_HOST"},
+    {"name": "reject-unsorted-query", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set_target_everywhere", "value": "https://api.example.com/v1/widgets/42?b=2&a=1"}], "expect_code": "HTTP_TARGET_QUERY_ORDER"},
+    {"name": "reject-noncanonical-percent-encoding", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set_target_everywhere", "value": "https://api.example.com/v1/widgets/%7e42?a=1&b=2"}], "expect_code": "HTTP_TARGET_PERCENT_ENCODING"},
+    {"name": "reject-weak-etag", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set", "path": ["documents", "pre_state", "strong_etag"], "value": "W/\"revision-17\""}], "expect_code": "HTTP_ETAG_WEAK"},
+    {"name": "reject-resource-origin-mismatch", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set", "path": ["documents", "resource_claim", "origin"], "value": "https://other.example.com"}], "expect_code": "HTTP_ORIGIN_MISMATCH"},
+    {"name": "reject-method-mismatch", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set", "path": ["documents", "dispatch_evidence", "method"], "value": "PATCH"}], "expect_code": "HTTP_METHOD_MISMATCH"},
+    {"name": "reject-create-patch", "base": "create-only-put", "mutations": [{"op": "set", "path": ["documents", "arguments", "method"], "value": "PATCH"}, {"op": "set", "path": ["documents", "resource_claim", "method"], "value": "PATCH"}, {"op": "set", "path": ["documents", "dispatch_evidence", "method"], "value": "PATCH"}], "expect_code": "HTTP_CREATE_METHOD"},
+    {"name": "reject-credential-header", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set", "path": ["documents", "arguments", "headers", "authorization"], "value": "Bearer attacker"}], "expect_code": "HTTP_HEADER_FORBIDDEN"},
+    {"name": "reject-model-conditional-header", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set", "path": ["documents", "arguments", "headers", "if-match"], "value": "\"other\""}], "expect_code": "HTTP_HEADER_FORBIDDEN"},
+    {"name": "reject-condition-value-mismatch", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set", "path": ["documents", "dispatch_evidence", "condition", "value"], "value": "\"revision-18\""}], "expect_code": "HTTP_CONDITION_MISMATCH"},
+    {"name": "reject-idempotency-key-mismatch", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set", "path": ["documents", "arguments", "idempotency_key"], "value": "other-grant"}], "expect_code": "HTTP_IDEMPOTENCY_MISMATCH"},
+    {"name": "reject-dispatch-before-journal", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set", "path": ["documents", "dispatch_evidence", "first_request_byte_at_ms"], "value": 1999}], "expect_code": "HTTP_DISPATCH_ORDER"},
+    {"name": "reject-observation-before-dispatch", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set", "path": ["documents", "observation_evidence", "observed_at_ms"], "value": 2000}], "expect_code": "HTTP_OBSERVATION_ORDER"},
+    {"name": "reject-uncommitted-status-class", "base": "create-only-put", "mutations": [{"op": "set", "path": ["documents", "observation_evidence", "status"], "value": 409}], "expect_code": "HTTP_STATUS_UNCOMMITTED"},
+    {"name": "reject-postcondition-digest-mismatch", "base": "create-only-put", "mutations": [{"op": "set", "path": ["documents", "observation_evidence", "postconditions", 0, "observed_sha256"], "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}], "expect_code": "HTTP_POSTCONDITION_MISMATCH"},
+    {"name": "reject-all-zero-digest", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set", "path": ["documents", "expected_effect", "response_body_sha256"], "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"}], "expect_code": "PROFILE_SCHEMA"},
+    {"name": "reject-reconciliation-without-attribution", "base": "existing-put-with-strong-etag", "mutations": [{"op": "set", "path": ["documents", "reconciliation_evidence", "attribution"], "value": {"kind": "none", "value": null}}], "expect_code": "HTTP_RECONCILIATION_UNATTRIBUTED"}
+  ]
+}

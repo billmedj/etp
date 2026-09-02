@@ -1,0 +1,25 @@
+[package]
+name = "effect-transaction-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license-file.workspace = true
+authors.workspace = true
+publish.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Command-line verifier and commitment tool for ETP records"
+
+[[bin]]
+name = "etp"
+path = "src/main.rs"
+
+[dependencies]
+clap.workspace = true
+effect-transaction-core = { path = "../effect-transaction-core" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true

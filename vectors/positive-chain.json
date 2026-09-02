@@ -1,0 +1,104 @@
+{
+  "profile": "effect-transaction/core/0.1",
+  "description": "Complete chain ending in an unknown effect reconciled by two append-only observations.",
+  "transaction": {
+    "commitment": {
+      "version": 1,
+      "commitment_id": "commitment-01",
+      "principal": "user:alice@example.test",
+      "objective_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "constraints_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "authority_scope_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "policy_epoch": 7,
+      "configuration_epoch": 12,
+      "created_at_ms": 1760000000000,
+      "expires_at_ms": 1760000900000
+    },
+    "proposal": {
+      "version": 1,
+      "proposal_id": "proposal-01",
+      "commitment_hash": "sha256:ddd4eb6e45872278d745eb93e6c005c844ec297ace77808bd62723763b14686e",
+      "effect_profile": "io.effect-transaction.http.v1",
+      "operation": "post",
+      "target": "https://api.example.test/deployments",
+      "arguments_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "expected_effect_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "pre_state_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "resource_claim_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "created_at_ms": 1760000001000,
+      "expires_at_ms": 1760000600000
+    },
+    "decision": {
+      "version": 1,
+      "decision_id": "decision-01",
+      "proposal_hash": "sha256:72b779c8bd5c56b7f2a84f4daef85f89bc8e5069b628ca80199ea3ceb7983ed1",
+      "evidence_hashes": [
+        "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+        "sha256:9999999999999999999999999999999999999999999999999999999999999999"
+      ],
+      "outcome": "allow",
+      "reason_codes": [
+        "policy.allow"
+      ],
+      "decided_at_ms": 1760000002000,
+      "expires_at_ms": 1760000300000
+    },
+    "grant": {
+      "version": 1,
+      "grant_id": "grant-01",
+      "proposal_hash": "sha256:72b779c8bd5c56b7f2a84f4daef85f89bc8e5069b628ca80199ea3ceb7983ed1",
+      "decision_hash": "sha256:6710d73f2e7bdea7328637859e7f08370f809b7e8514741fef5d80d39e13702b",
+      "audience": "executor:edge-01",
+      "not_before_ms": 1760000003000,
+      "expires_at_ms": 1760000060000,
+      "uses": 1,
+      "nonce": "7f9a99c1AQIDBAUGBwgJCg"
+    },
+    "receipt": {
+      "version": 1,
+      "receipt_id": "receipt-01",
+      "proposal_hash": "sha256:72b779c8bd5c56b7f2a84f4daef85f89bc8e5069b628ca80199ea3ceb7983ed1",
+      "grant_hash": "sha256:37ae6952c81c3d306921d497919ca3356361254640f93345dd2587502b556f8c",
+      "attempt_id": "attempt-01",
+      "claimed_at_ms": 1760000004000,
+      "dispatched_at_ms": 1760000004100,
+      "completed_at_ms": 1760000009000,
+      "outcome": "unknown",
+      "observation_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "reconciliations": [
+      {
+        "version": 1,
+        "reconciliation_id": "reconciliation-01",
+        "receipt_hash": "sha256:915bd9cef697718b037aa1c2b036017b870eacfd0cbe4d622ca6f438f07ae9df",
+        "sequence": 1,
+        "parent_reconciliation_hash": null,
+        "observed_at_ms": 1760000010000,
+        "outcome": "still_unknown",
+        "evidence_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      {
+        "version": 1,
+        "reconciliation_id": "reconciliation-02",
+        "receipt_hash": "sha256:915bd9cef697718b037aa1c2b036017b870eacfd0cbe4d622ca6f438f07ae9df",
+        "sequence": 2,
+        "parent_reconciliation_hash": "sha256:fb6994e1a5cdbc431f2b64221ebdaf4ce9ced593b9ee6c33953362355a7face5",
+        "observed_at_ms": 1760000020000,
+        "outcome": "effect_confirmed",
+        "evidence_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      }
+    ]
+  },
+  "expected": {
+    "commitment_hash": "sha256:ddd4eb6e45872278d745eb93e6c005c844ec297ace77808bd62723763b14686e",
+    "proposal_hash": "sha256:72b779c8bd5c56b7f2a84f4daef85f89bc8e5069b628ca80199ea3ceb7983ed1",
+    "decision_hash": "sha256:6710d73f2e7bdea7328637859e7f08370f809b7e8514741fef5d80d39e13702b",
+    "grant_hash": "sha256:37ae6952c81c3d306921d497919ca3356361254640f93345dd2587502b556f8c",
+    "receipt_hash": "sha256:915bd9cef697718b037aa1c2b036017b870eacfd0cbe4d622ca6f438f07ae9df",
+    "reconciliation_hashes": [
+      "sha256:fb6994e1a5cdbc431f2b64221ebdaf4ce9ced593b9ee6c33953362355a7face5",
+      "sha256:fad83d7caf1a59e6d98077a6f1e616415b26b8b7683c15409695e2647db64770"
+    ],
+    "state": "effect_confirmed"
+  }
+}

@@ -1,0 +1,275 @@
+{
+  "$schema": "../conformance/trace.schema.json",
+  "schema_version": 1,
+  "profile": "effect-transaction/core/0.1",
+  "base": "positive-chain.json",
+  "traces": [
+    {
+      "id": "chain.positive.complete",
+      "steps": [{ "operation": "verify_fixture", "fixture": "positive_chain" }],
+      "observe": ["state"]
+    },
+    {
+      "id": "chain.positive.not_dispatched",
+      "steps": [{ "operation": "verify_fixture", "fixture": "positive_not_dispatched" }],
+      "observe": ["state"]
+    },
+    {
+      "id": "grant.second_for_decision",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "prepare_conflicting_grant", "uniqueness": "decision" },
+        { "operation": "register_grant", "document": "secondary" }
+      ]
+    },
+    {
+      "id": "grant.second_for_proposal",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "prepare_conflicting_grant", "uniqueness": "proposal" },
+        { "operation": "register_grant", "document": "secondary" }
+      ]
+    },
+    {
+      "id": "claim.current",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at" } }
+      ],
+      "observe": ["claim_counts"]
+    },
+    {
+      "id": "claim.replay",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at" } },
+        { "operation": "claim_grant", "attempt_id": "attempt-replay", "now": { "source": "receipt_claimed_at", "offset_ms": 1 } }
+      ],
+      "observe": ["claim_counts"]
+    },
+    {
+      "id": "claim.competing",
+      "oracle": "sequential_lifecycle",
+      "steps": [
+        { "operation": "register_grant" },
+        {
+          "operation": "claim_grant",
+          "attempt_id": "attempt-{index}",
+          "now": { "source": "receipt_claimed_at" },
+          "repeat": 8,
+          "allowed_error": "grant_already_claimed"
+        }
+      ],
+      "observe": ["claim_counts"]
+    },
+    {
+      "id": "claim.wrong_audience",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at" }, "request_overrides": { "expected_audience": "executor:attacker" } }
+      ]
+    },
+    {
+      "id": "claim.wrong_policy_epoch",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at" }, "request_overrides": { "observed_policy_epoch": 8 } }
+      ]
+    },
+    {
+      "id": "claim.wrong_configuration_epoch",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at" }, "request_overrides": { "observed_configuration_epoch": 13 } }
+      ]
+    },
+    {
+      "id": "claim.wrong_pre_state",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at" }, "request_overrides": { "observed_pre_state_digest": "sha256:d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5" } }
+      ]
+    },
+    {
+      "id": "claim.wrong_resource_claim",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at" }, "request_overrides": { "observed_resource_claim_digest": "sha256:d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6" } }
+      ]
+    },
+    {
+      "id": "claim.revoked",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at" }, "request_overrides": { "revoked": true } }
+      ]
+    },
+    {
+      "id": "claim.premature",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "grant_not_before", "offset_ms": -1 } }
+      ]
+    },
+    {
+      "id": "claim.expired",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "grant_expires_at" } }
+      ]
+    },
+    {
+      "id": "claim.clock_rollback",
+      "steps": [
+        { "operation": "register_grant" },
+        {
+          "operation": "claim_grant",
+          "attempt_id": "attempt-rejected",
+          "now": { "source": "receipt_claimed_at" },
+          "request_overrides": { "expected_audience": "executor:attacker" },
+          "allowed_error": "audience_mismatch",
+          "require_error": true
+        },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at", "offset_ms": -1 } }
+      ]
+    },
+    {
+      "id": "receipt.before_claim",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "record_receipt" }
+      ]
+    },
+    {
+      "id": "receipt.wrong_attempt",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at" } },
+        { "operation": "record_receipt", "overrides": { "attempt_id": "attempt-attacker" } }
+      ]
+    },
+    {
+      "id": "receipt.idempotent_replay",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at" } },
+        { "operation": "record_receipt", "repeat": 2 }
+      ],
+      "observe": ["receipt_writes"]
+    },
+    {
+      "id": "receipt.conflicting_replay",
+      "steps": [
+        { "operation": "register_grant" },
+        { "operation": "claim_grant", "attempt_id": "attempt-01", "now": { "source": "receipt_claimed_at" } },
+        { "operation": "record_receipt" },
+        { "operation": "record_receipt", "overrides": { "observation_digest": "sha256:d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7" } }
+      ]
+    },
+    {
+      "id": "receipt.success_without_dispatch",
+      "steps": [
+        { "operation": "mutate_transaction", "changes": [
+          { "pointer": "/reconciliations", "replacement": [] },
+          { "pointer": "/receipt/outcome", "replacement": "succeeded" },
+          { "pointer": "/receipt/dispatched_at_ms", "replacement": null }
+        ] },
+        { "operation": "verify_transaction" }
+      ],
+      "observe": ["state"]
+    },
+    {
+      "id": "receipt.failure_without_dispatch",
+      "steps": [
+        { "operation": "mutate_transaction", "changes": [
+          { "pointer": "/reconciliations", "replacement": [] },
+          { "pointer": "/receipt/outcome", "replacement": "failed" },
+          { "pointer": "/receipt/dispatched_at_ms", "replacement": null }
+        ] },
+        { "operation": "verify_transaction" }
+      ],
+      "observe": ["state"]
+    },
+    {
+      "id": "receipt.not_dispatched_with_dispatch",
+      "steps": [
+        { "operation": "mutate_transaction", "changes": [
+          { "pointer": "/reconciliations", "replacement": [] },
+          { "pointer": "/receipt/outcome", "replacement": "not_dispatched" }
+        ] },
+        { "operation": "verify_transaction" }
+      ],
+      "observe": ["state"]
+    },
+    {
+      "id": "receipt.unknown_without_dispatch",
+      "steps": [
+        { "operation": "mutate_transaction", "changes": [
+          { "pointer": "/reconciliations", "replacement": [] },
+          { "pointer": "/receipt/outcome", "replacement": "unknown" },
+          { "pointer": "/receipt/dispatched_at_ms", "replacement": null }
+        ] },
+        { "operation": "verify_transaction" }
+      ],
+      "observe": ["state"]
+    },
+    {
+      "id": "reconciliation.fork",
+      "steps": [
+        { "operation": "mutate_transaction", "changes": [{ "pointer": "/reconciliations/1/parent_reconciliation_hash", "replacement": "sha256:d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0" }] },
+        { "operation": "verify_transaction" }
+      ],
+      "observe": ["state"]
+    },
+    {
+      "id": "reconciliation.sequence_gap",
+      "steps": [
+        { "operation": "mutate_transaction", "changes": [{ "pointer": "/reconciliations/1/sequence", "replacement": 3 }] },
+        { "operation": "verify_transaction" }
+      ],
+      "observe": ["state"]
+    },
+    {
+      "id": "reconciliation.time_rollback",
+      "steps": [
+        { "operation": "mutate_transaction", "changes": [{ "pointer": "/reconciliations/1/observed_at_ms", "replacement": 1760000009999 }] },
+        { "operation": "verify_transaction" }
+      ],
+      "observe": ["state"]
+    },
+    {
+      "id": "reconciliation.after_terminal",
+      "steps": [
+        { "operation": "append_terminal_successor" },
+        { "operation": "verify_transaction" }
+      ],
+      "observe": ["state"]
+    },
+    {
+      "id": "reconciliation.history_limit",
+      "steps": [
+        { "operation": "fill_reconciliation_history", "count": "maximum_plus_one" },
+        { "operation": "verify_transaction" }
+      ],
+      "observe": ["state"]
+    },
+    { "id": "transport.duplicate_key", "steps": [{ "operation": "parse_transport", "vector": "duplicate_key" }] },
+    { "id": "transport.escaped_duplicate_key", "steps": [{ "operation": "parse_transport", "vector": "escaped_duplicate_key" }] },
+    { "id": "transport.invalid_utf8", "steps": [{ "operation": "parse_transport", "vector": "invalid_utf8" }] },
+    { "id": "transport.unescaped_control", "steps": [{ "operation": "parse_transport", "vector": "unescaped_control" }] },
+    { "id": "transport.protocol_c1_control", "steps": [{ "operation": "parse_transport", "vector": "protocol_c1_control" }] },
+    { "id": "transport.depth_boundary", "steps": [{ "operation": "parse_transport", "vector": "depth_boundary" }] },
+    { "id": "transport.depth_limit", "steps": [{ "operation": "parse_transport", "vector": "depth_limit" }] },
+    { "id": "transport.node_boundary", "steps": [{ "operation": "parse_transport", "vector": "node_boundary" }] },
+    { "id": "transport.node_limit", "steps": [{ "operation": "parse_transport", "vector": "node_limit" }] },
+    { "id": "transport.byte_limit", "steps": [{ "operation": "parse_transport", "vector": "byte_limit" }] },
+    { "id": "transport.unpaired_surrogate", "steps": [{ "operation": "parse_transport", "vector": "unpaired_surrogate" }] },
+    { "id": "canonical.object_order", "steps": [{ "operation": "canonicalize", "vector": "object_order" }] },
+    { "id": "canonical.unicode_scalar_order", "steps": [{ "operation": "canonicalize", "vector": "unicode_scalar_order" }] },
+    { "id": "canonical.escape_set", "steps": [{ "operation": "canonicalize", "vector": "escape_set" }] },
+    { "id": "canonical.negative_zero", "steps": [{ "operation": "canonicalize", "vector": "negative_zero" }] },
+    { "id": "canonical.fraction", "steps": [{ "operation": "canonicalize", "vector": "fraction" }] },
+    { "id": "canonical.exponent", "steps": [{ "operation": "canonicalize", "vector": "exponent" }] },
+    { "id": "canonical.unsafe_integer", "steps": [{ "operation": "canonicalize", "vector": "unsafe_integer" }] }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@effect-transaction/reference-profiles",
+  "version": "0.1.0-alpha.1",
+  "description": "Schemas and conformance tests for ETP effect profiles",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/billmedj/etp.git",
+    "directory": "profiles"
+  },
+  "bugs": {
+    "url": "https://github.com/billmedj/etp/issues"
+  },
+  "scripts": {
+    "test": "node validate-core-bundle-schemas.mjs && node validate-reference-profiles.mjs"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0"
+  }
+}

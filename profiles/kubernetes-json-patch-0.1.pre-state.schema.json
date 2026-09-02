@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/profiles/kubernetes-json-patch-0.1.pre-state.schema.json",
+  "title": "Kubernetes JSON Patch profile 0.1: pre-state",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile", "document_type", "version", "cluster_trust_domain", "api_path", "uid", "resource_version", "object_sha256"],
+  "properties": {
+    "profile": {"const": "effect-transaction/kubernetes-json-patch/0.1"},
+    "document_type": {"const": "pre_state"},
+    "version": {"const": 1},
+    "cluster_trust_domain": {"type": "string", "minLength": 1, "maxLength": 253},
+    "api_path": {"type": "string", "minLength": 1, "maxLength": 4096},
+    "uid": {"type": "string", "minLength": 8, "maxLength": 128},
+    "resource_version": {"type": "string", "minLength": 1, "maxLength": 256},
+    "object_sha256": {"type": "string", "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"}
+  }
+}

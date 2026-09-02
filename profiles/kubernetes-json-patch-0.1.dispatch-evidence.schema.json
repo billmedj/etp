@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://billmedj.github.io/etp/profiles/kubernetes-json-patch-0.1.dispatch-evidence.schema.json",
+  "title": "Kubernetes JSON Patch profile 0.1: dispatch evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile", "document_type", "version", "attempt_id", "grant_id", "target", "api_server_identity", "patch_sha256", "journaled_at_ms", "first_patch_byte_at_ms"],
+  "properties": {
+    "profile": {"const": "effect-transaction/kubernetes-json-patch/0.1"},
+    "document_type": {"const": "dispatch_evidence"},
+    "version": {"const": 1},
+    "attempt_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "grant_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "target": {"type": "string", "minLength": 10, "maxLength": 4096},
+    "api_server_identity": {"type": "string", "minLength": 1, "maxLength": 512},
+    "patch_sha256": {"type": "string", "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"},
+    "journaled_at_ms": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+    "first_patch_byte_at_ms": {"type": "integer", "minimum": 0, "maximum": 9007199254740991}
+  }
+}

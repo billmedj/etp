@@ -1,0 +1,110 @@
+{
+  "profile": "effect-transaction/core/0.1",
+  "description": "Portable one-field mutations of positive-chain.json. Every case must fail closed with the declared verifier code.",
+  "base": "positive-chain.json",
+  "cases": [
+    {
+      "name": "unknown proposal field",
+      "pointer": "/proposal/model_output",
+      "replacement": "untrusted text",
+      "expected_code": "unknown_field"
+    },
+    {
+      "name": "unsupported record version",
+      "pointer": "/commitment/version",
+      "replacement": 2,
+      "expected_code": "version"
+    },
+    {
+      "name": "all-zero commitment",
+      "pointer": "/commitment/objective_digest",
+      "replacement": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_code": "digest"
+    },
+    {
+      "name": "proposal substitutes task commitment",
+      "pointer": "/proposal/commitment_hash",
+      "replacement": "sha256:d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0",
+      "expected_code": "binding_mismatch"
+    },
+    {
+      "name": "evidence set order is malleated",
+      "pointer": "/decision/evidence_hashes",
+      "replacement": [
+        "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+        "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+      ],
+      "expected_code": "unsorted_array"
+    },
+    {
+      "name": "deny decision attempts to mint a grant",
+      "pointer": "/decision/outcome",
+      "replacement": "deny",
+      "expected_code": "nonauthorizing_decision"
+    },
+    {
+      "name": "grant is made reusable",
+      "pointer": "/grant/uses",
+      "replacement": 2,
+      "expected_code": "single_use"
+    },
+    {
+      "name": "grant nonce lacks 128-bit material",
+      "pointer": "/grant/nonce",
+      "replacement": "too-short",
+      "expected_code": "nonce"
+    },
+    {
+      "name": "receipt substitutes grant",
+      "pointer": "/receipt/grant_hash",
+      "replacement": "sha256:d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0",
+      "expected_code": "binding_mismatch"
+    },
+    {
+      "name": "grant claimed at expiration",
+      "pointer": "/receipt/claimed_at_ms",
+      "replacement": 1760000060000,
+      "also": [
+        {
+          "pointer": "/receipt/dispatched_at_ms",
+          "replacement": 1760000060100
+        },
+        {
+          "pointer": "/receipt/completed_at_ms",
+          "replacement": 1760000060200
+        }
+      ],
+      "expected_code": "expired_claim"
+    },
+    {
+      "name": "known outcome carries unknown-outcome reconciliation",
+      "pointer": "/receipt/outcome",
+      "replacement": "succeeded",
+      "expected_code": "invalid_reconciliation"
+    },
+    {
+      "name": "success claims no dispatch timestamp",
+      "pointer": "/receipt/outcome",
+      "replacement": "succeeded",
+      "also": [
+        {
+          "pointer": "/receipt/dispatched_at_ms",
+          "replacement": null
+        }
+      ],
+      "expected_code": "receipt_dispatch"
+    },
+    {
+      "name": "not-dispatched receipt carries a dispatch timestamp",
+      "pointer": "/receipt/outcome",
+      "replacement": "not_dispatched",
+      "expected_code": "receipt_dispatch"
+    },
+    {
+      "name": "reconciliation breaks append-only parent link",
+      "pointer": "/reconciliations/1/parent_reconciliation_hash",
+      "replacement": "sha256:d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0",
+      "expected_code": "binding_mismatch"
+    }
+  ]
+}

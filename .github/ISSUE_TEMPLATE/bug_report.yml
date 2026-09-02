@@ -1,0 +1,74 @@
+name: Bug report
+description: Report a reproducible implementation or documentation defect.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not report a vulnerability here. Follow SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: Give the exact tag or commit hash.
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Specification or schema
+        - Rust implementation
+        - TypeScript implementation
+        - Conformance suite
+        - Reference profile
+        - Lean model
+        - TLA+ model
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Minimal input
+      description: Provide the smallest sanitized input that reproduces the defect.
+      render: text
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Include exact commands and tool versions.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed result
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Protocol, security, or compatibility impact
+      description: State which documented behavior or boundary is affected.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Public-report checks
+      options:
+        - label: I removed credentials, private data, customer data, and personal paths.
+          required: true
+        - label: This report does not contain private vulnerability details.
+          required: true

@@ -1,0 +1,16 @@
+* text=auto eol=lf
+
+*.rs text eol=lf
+*.toml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.mjs text eol=lf
+*.ts text eol=lf
+*.tla text eol=lf
+*.cfg text eol=lf
+*.lean text eol=lf
+
+*.png binary
+*.ico binary
+*.icns binary
+*.jar binary

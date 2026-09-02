@@ -1,0 +1,6 @@
+name = "etp-formal"
+version = "0.1.0-alpha.1"
+defaultTargets = ["ETPFormal"]
+
+[[lean_lib]]
+name = "ETPFormal"

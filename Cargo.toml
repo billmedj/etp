@@ -1,0 +1,56 @@
+[workspace]
+resolver = "3"
+members = [
+  "crates/effect-transaction-core",
+  "crates/effect-transaction-authority",
+  "crates/effect-transaction-sqlite",
+  "crates/effect-transaction-executor",
+  "crates/effect-transaction-cli",
+]
+
+[workspace.package]
+version = "0.1.0-alpha.1"
+edition = "2024"
+rust-version = "1.97.1"
+license-file = "LICENSE"
+authors = ["Bilal Medjani"]
+publish = false
+repository = "https://github.com/billmedj/etp"
+homepage = "https://github.com/billmedj/etp"
+
+[workspace.dependencies]
+clap = { version = "=4.5.48", features = ["derive"] }
+coset = "=0.4.2"
+ed25519-dalek = { version = "=2.2.0", features = ["rand_core"] }
+proptest = "=1.11.0"
+rusqlite = { version = "=0.37.0", features = ["bundled"] }
+serde = { version = "=1.0.228", features = ["derive"] }
+serde_json = "=1.0.145"
+sha2 = "=0.10.9"
+thiserror = "=2.0.17"
+
+[profile.release]
+codegen-units = 1
+lto = "thin"
+overflow-checks = true
+panic = "abort"
+strip = "symbols"
+
+[profile.dev]
+debug = 0
+incremental = false
+
+[profile.test]
+debug = 0
+incremental = false
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_debug_implementations = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"

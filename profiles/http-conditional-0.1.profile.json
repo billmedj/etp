@@ -1,0 +1,20 @@
+{
+  "profile": "effect-transaction/http-conditional/0.1",
+  "status": "implementer-draft",
+  "record_version": 1,
+  "schemas": {
+    "arguments": "http-conditional-0.1.arguments.schema.json",
+    "pre_state": "http-conditional-0.1.pre-state.schema.json",
+    "resource_claim": "http-conditional-0.1.resource-claim.schema.json",
+    "expected_effect": "http-conditional-0.1.expected-effect.schema.json",
+    "dispatch_evidence": "http-conditional-0.1.dispatch-evidence.schema.json",
+    "observation_evidence": "http-conditional-0.1.observation-evidence.schema.json",
+    "reconciliation_evidence": "http-conditional-0.1.reconciliation-evidence.schema.json"
+  },
+  "target_scheme": "https",
+  "methods": ["PUT", "PATCH", "DELETE"],
+  "redirects": "forbidden",
+  "existing_precondition": "If-Match with committed strong ETag",
+  "create_precondition": "If-None-Match: * for PUT only",
+  "blind_retry": "forbidden"
+}

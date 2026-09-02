@@ -1,0 +1,26 @@
+{
+  "name": "@effect-transaction/verifier",
+  "version": "0.1.0-alpha.1",
+  "private": true,
+  "description": "Zero-dependency verifier for ETP Core 0.1 record chains",
+  "type": "module",
+  "engines": {
+    "node": ">=22.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/billmedj/etp.git",
+    "directory": "typescript"
+  },
+  "bugs": {
+    "url": "https://github.com/billmedj/etp/issues"
+  },
+  "exports": "./src/index.ts",
+  "scripts": {
+    "test": "node --experimental-strip-types --test test/*.test.ts",
+    "verify": "node --experimental-strip-types src/cli.ts",
+    "conformance": "node --experimental-strip-types ../conformance/runner.ts",
+    "benchmark": "node --experimental-strip-types bench/verify-bench.ts"
+  },
+  "license": "Apache-2.0"
+}
