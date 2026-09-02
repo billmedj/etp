@@ -33,7 +33,7 @@ Agent frameworks, policy languages, credential systems, transports, and
 rollback engines remain outside the protocol. ETP defines a contract between
 these components. Model output does not create execution authority.
 
-## Why this boundary exists
+## Scope and reason to be
 
 Agent systems often authorize a broad tool or role, then let a model choose the
 final target and arguments. This leaves a gap between policy approval and the
