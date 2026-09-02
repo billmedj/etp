@@ -21,7 +21,7 @@ homepage = "https://github.com/billmedj/etp"
 [workspace.dependencies]
 clap = { version = "=4.5.48", features = ["derive"] }
 coset = "=0.4.2"
-ed25519-dalek = { version = "=2.2.0", features = ["rand_core"] }
+ed25519-dalek = { version = "=3.0.0", features = ["rand_core"] }
 proptest = "=1.11.0"
 rusqlite = { version = "=0.37.0", features = ["bundled"] }
 serde = { version = "=1.0.228", features = ["derive"] }
