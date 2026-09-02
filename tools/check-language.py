@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TEXT_SUFFIXES = {
     ".cfg",
     ".cff",
+    ".html",
     ".json",
     ".lean",
     ".lock",
