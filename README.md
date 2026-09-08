@@ -1,24 +1,52 @@
-<img src="./assets/etp-mark.svg" alt="ETP mark" width="48" height="48">
-
-# Effect Transaction Protocol
+# <img src="./assets/etp-mark.svg" alt="" width="44" height="44"> Effect Transaction Protocol
 
 [![CI](https://github.com/billmedj/etp/actions/workflows/ci.yml/badge.svg)](https://github.com/billmedj/etp/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 
-**Protocol:** Core 0.1 implementer draft; **Reference software:**
-0.1.0-alpha.1
+**Protocol:** Core 0.1 implementer draft; **Reference software:** 0.1.0-alpha.1
 
-Effect Transaction Protocol (ETP) defines an append-only record chain and
-executor rules for externally visible actions proposed by untrusted agents.
-An effect is one attempt to change or invoke an external target, such as an
-HTTP request, Kubernetes patch, or file write.
+Effect Transaction Protocol (ETP) defines how an executor checks permission for
+an external action proposed by an untrusted agent, then records what happened.
+For example, an HTTP request needs authorization for its specific target and
+arguments. Permission to use an HTTP tool alone is not enough.
 
-An agent can propose an effect. An evaluator decides whether to allow the exact
-proposal. A conforming executor validates the complete record chain and claims
-a short-lived, single-use grant before dispatch. The executor then records the
-observed outcome. If dispatch status is unclear, the outcome is `unknown` and
-the grant remains consumed. Reconciliation adds evidence for the next operator
-decision. It never restores the grant.
+This repository provides Rust and TypeScript verifiers, a Rust executor with a
+SQLite lifecycle store, and test cases. Start by checking an example record chain.
+
+## Try the verifier
+
+Requires Node.js 22.6 or later. The TypeScript package has no runtime dependencies.
+From a repository checkout:
+
+```console
+cd typescript
+npm test
+npm run verify -- ../vectors/positive-chain.json
+```
+
+The verifier checks record structure and bindings. It does not authorize or
+execute the proposed action.
+
+## How an action proceeds
+
+A task authority commits the task independently of model output. The agent's
+effect proposal binds the target, arguments, expected effect, pre-state, and
+resource claim. An evaluator returns `allow`, `deny`, or `review`.
+
+Only `allow` can produce an execution grant. Each proposal and decision can
+produce at most one grant, bound to one executor audience. Before dispatch,
+the executor validates the complete chain, checks current state, and atomically
+consumes the short-lived grant to create one attempt.
+
+The effect receipt records `not_dispatched`, `succeeded`, `failed`, or `unknown`
+from observed evidence. An `unknown` outcome prevents blind retry. Reconciliation
+appends evidence; it never restores the consumed grant or rewrites history.
+Single-use claim does not prove that an external target applies an effect exactly once.
+
+![An approved HTTP request loses its response. The grant stays consumed while the executor records unknown and reconciliation adds evidence.](./assets/transaction-flow.svg)
+
+<details>
+<summary>Record types</summary>
 
 ```text
 TaskCommitment
@@ -29,93 +57,21 @@ TaskCommitment
       -> ReconciliationRecord?
 ```
 
-Agent frameworks, policy languages, credential systems, transports, and
-rollback engines remain outside the protocol. ETP defines a contract between
-these components. Model output does not create execution authority.
+See the [protocol specification](./SPEC.md) for fields and required checks.
 
-## Scope and reason to be
+</details>
 
-Agent systems often authorize a broad tool or role, then let a model choose the
-final target and arguments. This leaves a gap between policy approval and the
-effect that reaches an external system.
+## Run the other checks
 
-ETP specifies a narrower boundary. It binds a grant to one typed proposal, one
-observed pre-state, one executor audience, and one claim. It preserves an
-`unknown` outcome when a crash or network failure makes the external result
-unclear.
-
-## Core properties
-
-A conforming deployment preserves these rules for each protected effect:
-
-1. A task authority commits the task independently of model output.
-2. The proposal binds the target, arguments, expected effect, pre-state, and
-   resource claim.
-3. An evaluator returns `allow`, `deny`, or `review` for that proposal.
-4. Only `allow` can produce a grant.
-5. One proposal and one decision can each produce at most one grant.
-6. The executor validates the complete chain and current state.
-7. The executor atomically consumes the grant before dispatch.
-8. The receipt records `not_dispatched`, `succeeded`, `failed`, or `unknown`
-   from evidence at the declared observation boundary.
-9. An `unknown` outcome prevents blind retry.
-10. Reconciliation appends evidence. It does not rewrite history or restore a
-    consumed grant.
-
-## Repository layout
-
-- [`SPEC.md`](./SPEC.md): protocol records, lifecycle, invariants, and
-  conformance requirements.
-- [`THREAT_MODEL.md`](./THREAT_MODEL.md): adversaries, trust assumptions,
-  security goals, and residual risks.
-- [`schemas/`](./schemas/): strict JSON Schema 2020-12 definitions.
-- [`profiles/`](./profiles/): Core inventory, authority profile, and reference
-  effect profiles.
-- [`vectors/`](./vectors/): positive, negative, canonicalization, authority,
-  and profile test vectors.
-- [`conformance/`](./conformance/): 77 deterministic Core lifecycle cases.
-- [`crates/`](./crates/): Rust core, authority, SQLite, executor, and CLI
-  crates.
-- [`typescript/`](./typescript/): a zero-dependency TypeScript structural
-  verifier and CLI.
-- [`formal/lean/`](./formal/lean/): 23 Lean theorem declarations for selected
-  lifecycle safety invariants.
-- [`formal/tla/`](./formal/tla/): one bounded TLA+ lifecycle model and its TLC
-  configuration.
-- [`IMPLEMENTATION_STATUS.md`](./IMPLEMENTATION_STATUS.md): implemented
-  components, evidence, and limits.
-- [`RELATED_WORK.md`](./RELATED_WORK.md): relationship to adjacent standards
-  and systems.
-- [`BENCHMARKS.md`](./BENCHMARKS.md): verifier benchmark method and limits.
-- [`LANGUAGE.md`](./LANGUAGE.md): protocol terminology and public claim rules.
-- [`BRAND.md`](./BRAND.md): visual identity and public writing guidance.
-
-## Quick start
-
-### TypeScript verifier
-
-Requires Node.js 22.6 or later.
-
-```console
-cd typescript
-npm test
-npm run verify -- ../vectors/positive-chain.json
-```
-
-The TypeScript package has no runtime dependencies.
-
-### Rust implementation
-
-Use the Rust toolchain pinned by `rust-toolchain.toml`.
+Run each section from the repository root. Use the Rust toolchain pinned by
+`rust-toolchain.toml`:
 
 ```console
 cargo test --workspace --locked
 cargo run --locked -p effect-transaction-cli -- verify vectors/positive-chain.json
 ```
 
-### Conformance suite
-
-Run from the repository root:
+The Core conformance suite contains 77 deterministic lifecycle cases:
 
 ```console
 node --experimental-strip-types conformance/runner.ts
@@ -127,7 +83,7 @@ Write a machine-readable report with:
 node --experimental-strip-types conformance/runner.ts --report effect-transaction-conformance-report.json
 ```
 
-### Reference profiles
+The reference-profile suite checks document schemas and 50 profile vectors:
 
 ```console
 cd profiles
@@ -135,15 +91,10 @@ npm ci --ignore-scripts
 npm test
 ```
 
-The profile suite validates the registered document schemas and 50 profile
-vectors.
-
 ### Evidence checks
 
-The repository pins Lean, TLA+ tools, Rust, and dependency lockfiles. The CI
-evidence environment uses Node.js 24.10.0, Python 3.13, and Java 21. The local
-JavaScript tools support Node.js 22.6 or later. Run these commands from the
-repository root:
+The repository pins Lean, TLA+ tools, Rust, and dependency lockfiles. CI uses
+Node.js 24.10.0, Python 3.13, and Java 21. From the repository root:
 
 ```console
 python tools/check-language.py
@@ -159,55 +110,35 @@ python tools/check-evidence.py
 python tools/source-manifest.py --git git
 ```
 
-`tools/run-tla.py` performs the declared finite search and rewrites the
-deterministic result record. The checked-in counters do not replace that run.
+`tools/run-tla.py` performs the declared finite search and rewrites its result
+record. Checked-in counters do not replace that run.
 
-## Integration model
+## Integrate ETP
 
-```text
-agent or workflow
-        |
-        v
-ETP authority and claim boundary
-        |
-        v
-conforming effect adapter
-        |
-        v
-filesystem, HTTP service, Git host, cloud API, or Kubernetes API
-```
+An [effect profile](./profiles/) defines target identity, arguments, pre-state
+checks, dispatch, observation, and reconciliation. Profiles can restrict actions;
+they cannot expand task authority or weaken single-use and unknown-outcome rules.
+Agent frameworks, policy languages, credentials, transports, and rollback engines
+remain deployment choices.
 
-An effect profile defines target identity, typed arguments, pre-state checks,
-dispatch, observation, and reconciliation for one effect class. A profile can
-add restrictions. It cannot expand task authority or weaken single-use and
-unknown-outcome rules.
+A deployment needs complete mediation, durable atomic storage, protected keys,
+trusted configuration and time, validated profiles, target-specific tests, and
+external review. Core 0.1 is not an adopted standard or a production certification.
+State checks before claim still leave a race before dispatch; mutating targets
+need their own conditions or fencing.
+Repository evidence does not establish prompt-injection immunity, external truth,
+ecosystem interoperability, or a model-to-code refinement proof.
 
-## Security and maturity
-
-ETP 0.1 is an implementer draft. It is not an adopted standard, a production
-certification, or an audited security product.
-
-The repository provides Rust and TypeScript structural verifiers, a Rust
-lifecycle store and executor, shared test vectors, 77 conformance cases, 23
-Lean theorem declarations, and one bounded TLA+ model. These artifacts do not
-prove implementation refinement, ecosystem interoperability, prompt-injection
-immunity, or safe production deployment.
-[`evidence-summary.json`](./evidence-summary.json) records the exact public
-counts and source-set hashes used for these statements.
-
-A deployment also needs complete mediation, durable atomic storage, trusted
-configuration, protected keys, trusted time, validated effect profiles,
-target-specific tests, and external review. See
-[`THREAT_MODEL.md`](./THREAT_MODEL.md) and
-[`IMPLEMENTATION_STATUS.md`](./IMPLEMENTATION_STATUS.md).
+- [Implementation status](./IMPLEMENTATION_STATUS.md): components, evidence, and limits.
+- [Threat model](./THREAT_MODEL.md): trust assumptions and residual risks.
+- [Schemas](./schemas/), [vectors](./vectors/), and [conformance cases](./conformance/): record formats and executable checks.
+- [Rust](./crates/) and [TypeScript](./typescript/): reference code.
+- [Lean](./formal/lean/), [TLA+](./formal/tla/), and [evidence summary](./evidence-summary.json): formal artifacts, bounds, counts, and source hashes.
+- [Related work](./RELATED_WORK.md) and [benchmarks](./BENCHMARKS.md): comparisons and measurement limits.
 
 ## Project policy
 
-- License: [Apache License 2.0](./LICENSE)
-- Identity and writing: [BRAND.md](./BRAND.md) and
-  [LANGUAGE.md](./LANGUAGE.md)
-- Security reports: [SECURITY.md](./SECURITY.md)
-- Contributions: [CONTRIBUTING.md](./CONTRIBUTING.md)
-- Governance: [GOVERNANCE.md](./GOVERNANCE.md)
-- Versioning: [VERSIONING.md](./VERSIONING.md)
-- Support: [SUPPORT.md](./SUPPORT.md)
+[Apache-2.0 license](./LICENSE) | [Contributing](./CONTRIBUTING.md) |
+[Security reports](./SECURITY.md) | [Governance](./GOVERNANCE.md) |
+[Versioning](./VERSIONING.md) | [Support](./SUPPORT.md) |
+[Identity](./BRAND.md) | [Terminology](./LANGUAGE.md)

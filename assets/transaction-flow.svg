@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="390" viewBox="0 0 880 390" role="img" aria-labelledby="title desc">
+  <title id="title">When a response is lost</title>
+  <desc id="desc">Example of an approved HTTP request. Consume its grant, send the request, then record unknown if the outcome cannot be established. Inspect the target and append evidence. The grant stays consumed.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M1 1L6 3.5L1 6" fill="none" stroke="#52605A" stroke-width="1.5"/></marker>
+  </defs>
+  <rect width="880" height="390" rx="12" fill="#F4F7F5"/>
+  <g font-family="IBM Plex Sans, Arial, sans-serif" fill="#121715">
+    <text x="36" y="49" font-size="28" font-weight="600">When a response is lost</text>
+    <text x="36" y="78" font-size="18" fill="#52605A">Example: an approved HTTP request</text>
+    <text x="36" y="151" font-size="24">Consume grant</text>
+    <text x="334" y="151" font-size="24">Send request</text>
+    <text x="634" y="151" font-size="24">No response</text>
+    <text x="36" y="286" font-size="24" fill="#A45F00">Record unknown</text>
+    <text x="334" y="286" font-size="24">Inspect target</text>
+    <text x="634" y="286" font-size="24">Append evidence</text>
+    <text x="36" y="355" font-size="18" fill="#52605A">The grant stays consumed. Any retry needs new authorization.</text>
+  </g>
+  <g fill="none" stroke="#52605A" stroke-width="2" marker-end="url(#arrow)">
+    <path d="M230 143H304"/>
+    <path d="M505 143H603"/>
+    <path d="M707 167V211H139V254"/>
+    <path d="M245 278H304"/>
+    <path d="M514 278H603"/>
+  </g>
+</svg>

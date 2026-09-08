@@ -83,8 +83,10 @@ Interface and website copy must follow these rules:
 
 The preferred short description is:
 
-> ETP defines records and executor rules for external actions proposed by
-> untrusted agents, from authorization through outcome reconciliation.
+> Authorization and outcome records for agent actions.
+
+Use [the lost-response example](assets/transaction-flow.svg) to explain why
+a consumed grant stays consumed. Keep full record definitions in the specification.
 
 ## Asset sources
 
