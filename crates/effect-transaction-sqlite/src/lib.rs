@@ -509,7 +509,8 @@ impl SqliteEffectStore {
     /// # Errors
     ///
     /// Returns an error for an unknown or mismatched claim, invalid time,
-    /// conflicting marker, or unavailable storage.
+    /// conflicting marker, a terminal receipt without dispatch evidence, or
+    /// unavailable storage.
     pub fn mark_dispatch_started(
         &mut self,
         grant_hash: &Digest32,
@@ -537,6 +538,12 @@ impl SqliteEffectStore {
                 });
             }
             return Err(StoreError::DispatchAlreadyStarted);
+        }
+        // A terminal receipt seals dispatch knowledge. In particular, neither
+        // not_dispatched nor an undispatched unknown result can later dispatch.
+        // Existing identical markers remain idempotent via the branch above.
+        if load_receipt_by_grant(&transaction, grant_hash.as_str())?.is_some() {
+            return Err(StoreError::DispatchEvidenceMismatch);
         }
         let last_time = transaction
             .query_row(
@@ -1705,6 +1712,51 @@ mod tests {
     }
 
     #[test]
+    fn terminal_undispatched_receipt_prevents_a_later_dispatch_marker()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let root = tempfile::tempdir()?;
+        for (suffix, outcome) in [
+            ("not-dispatched", ReceiptOutcome::NotDispatched),
+            ("unknown-undispatched", ReceiptOutcome::Unknown),
+        ] {
+            let path = root.path().join(format!("{suffix}.sqlite3"));
+            let mut store = SqliteEffectStore::open(&path)?;
+            let data = fixture(suffix)?;
+            let hash = register(&mut store, &data)?;
+            store.put_currentness(&snapshot(1))?;
+            store.claim(&data.grant, &request("attempt-terminal", 1), 4_000)?;
+            let receipt = EffectReceipt {
+                version: 1,
+                receipt_id: format!("receipt-{suffix}"),
+                proposal_hash: data.proposal.commitment()?,
+                grant_hash: hash.clone(),
+                attempt_id: "attempt-terminal".into(),
+                claimed_at_ms: 4_000,
+                dispatched_at_ms: None,
+                completed_at_ms: 4_200,
+                outcome,
+                observation_digest: digest(suffix),
+            };
+            store.record_receipt(&receipt)?;
+            drop(store);
+            let mut reopened = SqliteEffectStore::open(&path)?;
+            assert!(matches!(
+                reopened.mark_dispatch_started(&hash, "attempt-terminal", 4_300),
+                Err(StoreError::DispatchEvidenceMismatch)
+            ));
+            let lifecycle = reopened.lifecycle(&hash)?;
+            assert_eq!(lifecycle.receipt, Some(receipt));
+            assert_eq!(
+                lifecycle
+                    .claim
+                    .and_then(|claim| claim.dispatch_started_at_ms),
+                None
+            );
+        }
+        Ok(())
+    }
+
+    #[test]
     fn all_receipt_outcomes_preserve_exact_dispatch_knowledge()
     -> Result<(), Box<dyn std::error::Error>> {
         let root = tempfile::tempdir()?;
@@ -1740,6 +1792,9 @@ mod tests {
                 observation_digest: digest(suffix),
             };
             store.record_receipt(&receipt)?;
+            if let Some(dispatched_at_ms) = dispatched_at_ms {
+                store.mark_dispatch_started(&hash, &receipt.attempt_id, dispatched_at_ms)?;
+            }
             assert_eq!(store.lifecycle(&hash)?.receipt, Some(receipt));
         }
         Ok(())
